@@ -37,7 +37,7 @@ function Sidebar() {
           </Link>
         </Item>
         <Item className="group">
-          <Link to="/teste" href="#">
+          <Link to="/produtos" href="#">
             <HiOutlineShoppingBagStyled />
             <span>Produtos</span>
           </Link>

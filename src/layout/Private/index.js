@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import Sidebar from '../../components/Sidebar';
-import { Container } from './styles';
+import { Container, Wrapper } from './styles';
 
 function Private({ children }) {
   return (
     <Container>
       <Sidebar />
-      {children}
+      <Wrapper>{children}</Wrapper>
     </Container>
   );
 }
