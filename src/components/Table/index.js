@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
 import PropTypes from 'prop-types';
 import {
-  TableStyled, Td, TdWithImage, Th, WrapperTable, Pagination,
+  TableStyled, Tr, TdWithImage, Th, WrapperTable, Pagination,
 } from './styles';
 
 import formatPrice from '../../utils/formatPrice';
 
-function Table({ tableHeads, tableRows }) {
+function Table({ tableHeads, tableRows, handleClick }) {
   return (
     <>
       {/* <div className="my-2 flex sm:flex-row flex-col">
@@ -71,30 +71,33 @@ function Table({ tableHeads, tableRows }) {
                 </TdWithImage> */}
               {tableRows
                 && tableRows.map((item) => (
-                  <tr key={item.id}>
+                  <Tr key={item.id ? item.id : item} onClick={() => handleClick(item.id)}>
                     {item
                       && Object.entries(item).map(([key, value]) => (
-                        <Td key={`${key}`}>
-                          <p>{key === 'price' || key === 'total' ? formatPrice(value) : value}</p>
-                        </Td>
+                        <td key={`${key}-${value}`}>
+                          <p>{key === 'price' || key === 'total' || key === 'subtotal' ? formatPrice(value) : value}</p>
+                        </td>
                       ))}
-                  </tr>
+                  </Tr>
                 ))}
             </tbody>
           </TableStyled>
-          <Pagination>
-            <span>
-              Mostrando 1 a 4 de
-              {' '}
-              {tableRows && tableRows.length}
-              {' '}
-              registros
-            </span>
-            <div>
-              <button type="button">Anterior</button>
-              <button type="button">Próxima</button>
-            </div>
-          </Pagination>
+          {tableRows
+                && tableRows.length > 10 && (
+                <Pagination>
+                  <span>
+                    Mostrando 1 a 4 de
+                    {' '}
+                    {tableRows && tableRows.length}
+                    {' '}
+                    registros
+                  </span>
+                  <div>
+                    <button type="button">Anterior</button>
+                    <button type="button">Próxima</button>
+                  </div>
+                </Pagination>
+          )}
         </div>
       </WrapperTable>
     </>
@@ -106,8 +109,10 @@ export default Table;
 Table.propTypes = {
   tableHeads: PropTypes.arrayOf(PropTypes.string).isRequired,
   tableRows: PropTypes.arrayOf(PropTypes.any),
+  handleClick: PropTypes.func,
 };
 
 Table.defaultProps = {
   tableRows: null,
+  handleClick: () => {},
 };

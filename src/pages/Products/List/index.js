@@ -6,7 +6,7 @@ import Private from '../../../layout/Private';
 
 function Products() {
   const [products, setProducts] = useState();
-  const tableHeads = ['Nome', 'Preço', 'REF', 'COD', 'Estoque', 'Obs', 'Cor', 'Tamanho'];
+  const tableHeads = ['Nome', 'Preço', 'REF', 'Estoque', 'Obs', 'Cor', 'Tamanho', 'Marca'];
 
   const getProducts = () => {
     fetch('_mock/products.json')
@@ -14,6 +14,7 @@ function Products() {
       .then((json) => {
         json.map((item) => {
           delete item.id;
+          delete item.cod;
           return item;
         });
         setProducts(json);

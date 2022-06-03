@@ -38,11 +38,14 @@ export const TdWithImage = styled.td`
     }
   }
 `;
-export const Td = styled.td`
-  ${tw`px-5 py-5 border-b border-gray-200 bg-white text-sm`}
+export const Tr = styled.tr`
+  ${tw`bg-white hover:bg-gray-300 transition`}
+  td {
+    ${tw`px-5 py-5 border-b border-gray-200 text-sm`}
 
-  p {
-    ${tw`text-gray-900 whitespace-nowrap`}
+    p {
+      ${tw`text-gray-900`}
+    }
   }
 `;
 

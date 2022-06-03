@@ -2,7 +2,7 @@
   {
     "id": 1,
     "date": "03/06/2022",
-    "qt_produts": 10,
+    "qt_products": 10,
     "discount": 10,
     "total": 10,
     "obs": "Observaçòes do pedido",
@@ -12,7 +12,7 @@
   {
     "id": 2,
     "date": "04/06/2022",
-    "qt_produts": 5,
+    "qt_products": 5,
     "discount": 0,
     "total": 5,
     "obs": "Observaçòes do pedido 2",

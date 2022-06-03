@@ -1,0 +1,44 @@
+{
+  "id": 1,
+  "date": "03/06/2022",
+  "qt_products": 10,
+  "discount": 10,
+  "total": 10,
+  "obs": "Observaçòes do pedido",
+  "transaction": "Cartão de crédito",
+  "customer": {
+    "id": 1,
+    "name": "Gustavo Luigi",
+    "phone": "13991580407",
+    "address": "Rua Nabuco de Araújo, 491, apto 95",
+    "zipcode": "11025011"
+  },
+  "products": [
+    {
+      "id": 1,
+      "name": "Calça",
+      "price": 100,
+      "ref": "123-NK",
+      "cod": "123123",
+      "storage": 5,
+      "obs": "Observaçòes do produto Calça",
+      "color": "Branca",
+      "size": "36",
+      "brand": "NK",
+      "quantity": 4
+    },
+    {
+      "id": 2,
+      "name": "Camiseta",
+      "price": 300,
+      "ref": "3123-NK",
+      "cod": "654334",
+      "storage": 3,
+      "obs": "Observaçòes do produto Camiseta",
+      "color": "Preta",
+      "size": "M",
+      "brand": "Cris Barros",
+      "quantity": 6
+    }
+  ]
+}

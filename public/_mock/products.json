@@ -8,7 +8,8 @@
     "quantity": 5,
     "obs": "Observaçòes do produto",
     "id_color": "Branca",
-    "id_size": "36"
+    "id_size": "36",
+    "id_brand": "NK"
   },
   {
     "id": 2,
@@ -19,6 +20,19 @@
     "quantity": 3,
     "obs": "Observaçòes do produto Camiseta",
     "id_color": "Preta",
-    "id_size": "M"
+    "id_size": "M",
+    "id_brand": "Cris Barros"
+  },
+  {
+    "id": 3,
+    "name": "Casaco",
+    "price": 300,
+    "ref": "3123-NK",
+    "cod": "654334",
+    "quantity": 3,
+    "obs": "Observaçòes do produto Casaco",
+    "id_color": "Preta",
+    "id_size": "M",
+    "id_brand": "Cris Barros"
   }
 ]

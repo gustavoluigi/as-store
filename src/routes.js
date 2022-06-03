@@ -2,6 +2,7 @@ import { useRoutes } from 'react-router-dom';
 import Login from './pages/Auth/Login';
 import Dashboard from './pages/Dashboard';
 import Orders from './pages/Orders/List';
+import Order from './pages/Orders/Show';
 import Products from './pages/Products/List';
 
 export default function Router() {
@@ -11,15 +12,19 @@ export default function Router() {
       element: <Login />,
     },
     {
-      path: '/dashboard',
+      path: 'dashboard',
       element: <Dashboard />,
     },
     {
-      path: '/pedidos',
+      path: 'pedidos',
       element: <Orders />,
     },
     {
-      path: '/produtos',
+      path: 'pedidos/:id',
+      element: <Order />,
+    },
+    {
+      path: 'produtos',
       element: <Products />,
     },
   ]);
