@@ -29,7 +29,7 @@ function Order() {
           color: item.color,
           size: item.size,
           brand: item.brand,
-          subtotal: item.quantity * item.price,
+          subtotal: formatPrice(item.quantity * item.price),
         }));
 
         setProducts(filteredProducts);

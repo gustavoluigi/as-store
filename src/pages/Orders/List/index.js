@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
 import Private from '../../../layout/Private';
+import { AddIcon, Button } from './styles';
 
 function Orders() {
   const navigate = useNavigate();
@@ -23,8 +24,12 @@ function Orders() {
       });
   };
 
-  const handleClick = (orderId) => {
+  const handleTableClick = (orderId) => {
     navigate(`../pedidos/${orderId}`, { replace: true });
+  };
+
+  const handleAddClick = () => {
+    navigate('../pedidos/criar', { replace: false });
   };
 
   useEffect(() => {
@@ -32,8 +37,12 @@ function Orders() {
   }, []);
   return (
     <Private>
+      <Button onClick={handleAddClick}>
+        <AddIcon />
+        Novo pedido
+      </Button>
       <PageTitle>Pedidos</PageTitle>
-      <Table tableHeads={tableHeads} tableRows={orders} handleClick={handleClick} />
+      <Table tableHeads={tableHeads} tableRows={orders} handleClick={handleTableClick} />
     </Private>
   );
 }

@@ -75,7 +75,7 @@ function Table({ tableHeads, tableRows, handleClick }) {
                     {item
                       && Object.entries(item).map(([key, value]) => (
                         <td key={`${key}-${value}`}>
-                          <p>{key === 'price' || key === 'total' || key === 'subtotal' ? formatPrice(value) : value}</p>
+                          <p>{key === 'price' || key === 'total' ? formatPrice(value) : value}</p>
                         </td>
                       ))}
                   </Tr>

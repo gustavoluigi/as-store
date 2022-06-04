@@ -7,7 +7,7 @@ export const Form = styled.form`
 `;
 
 export const Button = styled.button`
-  ${tw`relative transition w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500`}
+  ${tw`relative transition w-full flex justify-center py-4 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500`}
 `;
 
 export const LockIcon = styled(HiLockClosed)`
