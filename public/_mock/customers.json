@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "name": "Gustavo Luigi",
+    "phone": "13991580407",
+    "address": "Rua Nabuco de Araújo, 491, apto 95",
+    "zipcode": "11025011"
+  },
+  {
+    "id": 2,
+    "name": "Victor Henrique",
+    "phone": "1399999999",
+    "address": "Rua Lorem Ipsum",
+    "zipcode": "11025011"
+  }
+]

@@ -17,7 +17,6 @@ function Orders() {
       .then((json) => {
         json.map((item) => {
           item.discount = item.discount === 0 ? '-' : `${item.discount} %`;
-          // delete item.id;
           return item;
         });
         setOrders(json);
@@ -29,7 +28,7 @@ function Orders() {
   };
 
   const handleAddClick = () => {
-    navigate('../pedidos/criar', { replace: false });
+    navigate('../pedidos/criar', { replace: true });
   };
 
   useEffect(() => {

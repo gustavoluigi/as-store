@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Form, LockIcon } from './styles';
 import isEmailValid from '../../utils/isEmailValid';
-import Input from '../Input';
+import Input from '../Form/Input';
 
 function LoginForm() {
   const [email, setEmail] = useState('');

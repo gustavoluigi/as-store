@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "type": "Cartão de crédito"
+  },
+  {
+    "id": 2,
+    "type": "Dinheiro"
+  },
+  {
+    "id": 3,
+    "type": "Cheque"
+  },
+  {
+    "id": 4,
+    "type": "Transferência"
+  }
+]

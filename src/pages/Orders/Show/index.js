@@ -3,6 +3,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import BackButton from '../../../components/BackButton';
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
 import Private from '../../../layout/Private';
@@ -41,6 +42,7 @@ function Order() {
   }, []);
   return (
     <Private>
+      <BackButton />
       <PageTitle>Pedido número {id}</PageTitle>
       {order && (
         <Details>

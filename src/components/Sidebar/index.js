@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import {
   Container,
   HiOutlineAdjustmentsStyled,
@@ -19,34 +19,34 @@ function Sidebar() {
       <Img src={asLogo} alt="Adriana Sotto" />
       <List className="">
         <Item className="group">
-          <Link to="/dashboard" href="#">
+          <NavLink to="/dashboard" href="#">
             <HiOutlineAdjustmentsStyled />
             <span>Dashboard</span>
-          </Link>
+          </NavLink>
         </Item>
         <Item className="group">
-          <Link to="/pedidos" href="#">
+          <NavLink to="/pedidos" href="#">
             <HiOutlineShoppingCartStyled />
             <span>Pedidos</span>
-          </Link>
+          </NavLink>
         </Item>
         <Item className="group">
-          <Link to="/teste" href="#">
+          <NavLink to="/teste" href="#">
             <HiOutlineUserGroupStyled />
             <span>Clientes</span>
-          </Link>
+          </NavLink>
         </Item>
         <Item className="group">
-          <Link to="/produtos" href="#">
+          <NavLink to="/produtos" href="#">
             <HiOutlineShoppingBagStyled />
             <span>Produtos</span>
-          </Link>
+          </NavLink>
         </Item>
         <Item className="group">
-          <Link to="/teste" href="#">
+          <NavLink to="/teste" href="#">
             <HiOutlineDocumentTextStyled />
             <span>Relatórios</span>
-          </Link>
+          </NavLink>
         </Item>
       </List>
     </Container>

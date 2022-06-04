@@ -6,5 +6,5 @@ export const Container = styled.div`
 `;
 
 export const Wrapper = styled.div`
-  ${tw`pt-14 px-8 w-full md:w-4/5 `}
+  ${tw`pt-14 px-8 pb-6 w-full md:w-4/5 `}
 `;
