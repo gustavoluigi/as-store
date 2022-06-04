@@ -26,16 +26,17 @@ export const Overlay = styled.div`
 `;
 
 export const Container = styled.div`
-  max-width: 450px;
-  width: 100%;
+  max-width: 90%;
+  width: 1200px;
+  max-height: 90vh;
+  overflow-y: auto;
   background: white;
   border-radius: 12px;
   padding: 40px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
-  text-align: center;
   position: relative;
 
-  h1 {
+  h2 {
     margin-top: 1rem;
     margin-bottom: 2rem;
 

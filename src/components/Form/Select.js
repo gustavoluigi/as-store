@@ -13,7 +13,7 @@ function Select({ label, options, ...props }) {
     <div className="relative mb-6">
       <Label>{label}</Label>
       <SelectStyled {...props}>
-        <option selected disabled>Selecione uma opção</option>
+        <option>Selecione uma opção</option>
         {options
           && options.map((item) => (
             <option key={item.key} value={item.value}>
@@ -40,5 +40,5 @@ Select.propTypes = {
 };
 
 Select.defaultProps = {
-  props: null,
+  props: {},
 };

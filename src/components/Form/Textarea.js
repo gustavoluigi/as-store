@@ -22,5 +22,9 @@ export default Textarea;
 
 Textarea.propTypes = {
   label: PropTypes.string.isRequired,
-  props: PropTypes.object.isRequired,
+  props: PropTypes.object,
+};
+
+Textarea.defaultProps = {
+  props: {},
 };

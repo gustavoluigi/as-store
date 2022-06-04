@@ -22,5 +22,9 @@ export default Input;
 
 Input.propTypes = {
   label: PropTypes.string.isRequired,
-  props: PropTypes.object.isRequired,
+  props: PropTypes.object,
+};
+
+Input.defaultProps = {
+  props: {},
 };

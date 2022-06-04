@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable consistent-return */
 /* eslint-disable max-len */
 import PropTypes from 'prop-types';
 import {
@@ -7,7 +9,7 @@ import {
 import formatPrice from '../../utils/formatPrice';
 
 function Table({
-  tableHeads, tableRows, handleClick, hasSearch,
+  tableHeads, tableRows, handleClick, hasSearch, hasSelection, handleSelect, qtEditable, updateQt,
 }) {
   return (
     <>
@@ -57,7 +59,23 @@ function Table({
         <div>
           <TableStyled>
             <thead>
-              <tr>{tableHeads && tableHeads.map((item) => <Th key={item}>{item}</Th>)}</tr>
+              <tr>
+                {hasSelection && (
+                  <Th className="w-4 p-4">
+                    <div className="flex items-center">
+                      <input
+                        id="checkbox-table-search-1"
+                        type="checkbox"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      />
+                      <label htmlFor="checkbox-table-search-1" className="sr-only">
+                        checkbox
+                      </label>
+                    </div>
+                  </Th>
+                )}
+                {tableHeads && tableHeads.map((item) => <Th key={item}>{item}</Th>)}
+              </tr>
             </thead>
             <tbody>
               {/* <TdWithImage>
@@ -76,12 +94,58 @@ function Table({
               {tableRows
                 && tableRows.map((item) => (
                   <Tr key={item.id ? item.id : item} onClick={() => handleClick(item.id)}>
+                    {hasSelection && (
+                      <td className="w-4 p-4">
+                        <div className="flex items-center">
+                          <input
+                            id="checkbox-table-search-1"
+                            type="checkbox"
+                            checked={item.checked}
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            onChange={(event) => handleSelect(item.id, event.target.checked)}
+                          />
+                          <label htmlFor="checkbox-table-search-1" className="sr-only">
+                            checkbox
+                          </label>
+                        </div>
+                      </td>
+                    )}
                     {item
-                      && Object.entries(item).map(([key, value]) => (
-                        <td key={`${key}-${value}`}>
-                          <p>{key === 'price' || key === 'total' ? formatPrice(value) : value}</p>
-                        </td>
-                      ))}
+                      && Object.entries(item).map(([key, value]) => {
+                        if (key !== 'checked') {
+                          if (qtEditable && key === 'quantity') {
+                            return (
+                              <td key={`${key}-${value}`}>
+                                <input
+                                  min="1"
+                                  type="number"
+                                  className="form-control
+                                  block
+                                  px-3
+                                  w-24
+                                  py-1.5
+                                  text-base
+                                  text-gray-700
+                                  bg-white bg-clip-padding
+                                  border border-solid border-gray-300
+                                  rounded
+                                  transition
+                                  ease-in-out
+                                  m-0
+                                  focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                                  value={value}
+                                  onChange={(event) => updateQt(item.id, event.target.value)}
+                                />
+                              </td>
+                            );
+                          }
+                          return (
+                            <td key={`${key}-${value}`}>
+                              <p>{key === 'price' || key === 'total' || key === 'subtotal' ? formatPrice(value) : value}</p>
+                            </td>
+                          );
+                        }
+                      })}
                   </Tr>
                 ))}
             </tbody>
@@ -113,11 +177,19 @@ Table.propTypes = {
   tableHeads: PropTypes.arrayOf(PropTypes.string).isRequired,
   tableRows: PropTypes.arrayOf(PropTypes.any),
   handleClick: PropTypes.func,
+  handleSelect: PropTypes.func,
   hasSearch: PropTypes.bool,
+  hasSelection: PropTypes.bool,
+  qtEditable: PropTypes.bool,
+  updateQt: PropTypes.func,
 };
 
 Table.defaultProps = {
   tableRows: null,
   handleClick: () => {},
+  handleSelect: () => {},
   hasSearch: false,
+  hasSelection: false,
+  qtEditable: false,
+  updateQt: () => {},
 };
