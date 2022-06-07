@@ -38,9 +38,9 @@ function Orders() {
     <Private>
       <Button onClick={handleAddClick}>
         <AddIcon />
-        Novo pedido
+        Nova venda
       </Button>
-      <PageTitle>Pedidos</PageTitle>
+      <PageTitle>Vendas</PageTitle>
       <Table tableHeads={tableHeads} tableRows={orders} handleClick={handleTableClick} />
     </Private>
   );

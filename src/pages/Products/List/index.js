@@ -27,7 +27,7 @@ function Products() {
   return (
     <Private>
       <PageTitle>Produtos</PageTitle>
-      <Table tableHeads={tableHeads} tableRows={products} />
+      <Table tableHeads={tableHeads} tableRows={products} hasSearch />
     </Private>
   );
 }

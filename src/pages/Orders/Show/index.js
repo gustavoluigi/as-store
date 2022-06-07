@@ -43,7 +43,7 @@ function Order() {
   return (
     <Private>
       <BackButton />
-      <PageTitle>Pedido número {id}</PageTitle>
+      <PageTitle>Venda número {id}</PageTitle>
       {order && (
         <Details>
           <div>

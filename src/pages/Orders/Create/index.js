@@ -34,6 +34,7 @@ function CreateOrder() {
       id: null,
       type: null,
     },
+    qt_products: 0,
     discount: null,
     obs: null,
     total: 0,
@@ -100,6 +101,7 @@ function CreateOrder() {
     if (checked) {
       setFormData((prevState) => ({
         ...prevState,
+        qt_products: prevState.qt_products + 1,
         total: prevState.total + filteredProduct[0].subtotal,
         products: [...prevState.products, filteredProduct[0]],
       }));
@@ -107,6 +109,7 @@ function CreateOrder() {
     } else {
       setFormData((prevState) => ({
         ...prevState,
+        qt_products: prevState.qt_products - 1,
         total: prevState.total - filteredProduct[0].subtotal,
         products: [...prevState.products.filter((item) => item.id !== id)],
       }));
@@ -115,10 +118,11 @@ function CreateOrder() {
   };
 
   const handleUnselectProduct = (id) => {
-    const productSubtotal = selectedProducts.filter((item) => item.id === id)[0].subtotal;
+    const product = selectedProducts.filter((item) => item.id === id)[0];
     setFormData((prevState) => ({
       ...prevState,
-      total: prevState.total - productSubtotal,
+      qt_products: prevState.qt_products - product.quantity,
+      total: prevState.total - product.subtotal,
       products: [...prevState.products.filter((item) => item.id !== id)],
     }));
     setSelectedProducts((prevState) => [...prevState.filter((item) => item.id !== id)]);
@@ -133,10 +137,9 @@ function CreateOrder() {
       quantity: parseInt(newQt, 10),
       subtotal: newSelectedProducts[index].price * newQt,
     };
-    console.log(product.quantity);
-    console.log(newQt);
     setFormData((prevState) => ({
       ...prevState,
+      qt_products: prevState.qt_products - product.quantity + newSelectedProducts[index].quantity,
       total: prevState.total - product.subtotal + newSelectedProducts[index].subtotal,
       products: newSelectedProducts,
     }));
@@ -145,8 +148,6 @@ function CreateOrder() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
-    console.log(selectedProducts);
   };
 
   useEffect(() => {
@@ -207,11 +208,13 @@ function CreateOrder() {
             <span>{formData.obs ? formData.obs : '-'}</span>
           </div>
         </Details>
+        <Button onClick={handleSubmit}>Confirmar</Button>
+        <Button onClick={() => setOpenSummaryModal(false)}>Cancelar</Button>
       </Modal>
       <BackButton />
       <PageTitle>Novo pedido</PageTitle>
       <Wrapper>
-        <Details>
+        {/* <Details>
           <div>
             <p>Nome do cliente:</p>
             <span>{formData.customer.name ? formData.customer.name : 'Não selecionado'}</span>
@@ -222,7 +225,7 @@ function CreateOrder() {
           </div>
           <div>
             <p>Quantidade de produtos:</p>
-            <span>{selectedProducts.length}</span>
+            <span>{formData.qt_products}</span>
           </div>
           <div>
             <p>Valor total da compra:</p>
@@ -247,7 +250,7 @@ function CreateOrder() {
             <p>Obersações:</p>
             <span>{formData.obs ? formData.obs : '-'}</span>
           </div>
-        </Details>
+        </Details> */}
         <form onSubmit={handleSubmit}>
           <Select
             label="Cliente"
