@@ -1,5 +1,8 @@
 import { Outlet, useRoutes } from 'react-router-dom';
 import Login from './pages/Auth/Login';
+import CreateCustomer from './pages/Customers/Create';
+import Customers from './pages/Customers/List';
+import ShowCustomer from './pages/Customers/Show';
 import Dashboard from './pages/Dashboard';
 import CreateOrder from './pages/Orders/Create';
 import EditOrder from './pages/Orders/Edit';
@@ -18,24 +21,36 @@ export default function Router() {
       element: <Dashboard />,
     },
     {
-      path: 'pedidos',
+      path: 'vendas',
       element: <Orders />,
     },
     {
-      path: 'pedidos/:id',
+      path: 'vendas/:id',
       element: <Order />,
     },
     {
-      path: 'pedidos/criar',
+      path: 'vendas/criar',
       element: <CreateOrder />,
     },
     {
-      path: 'pedidos/:id/editar',
+      path: 'vendas/:id/editar',
       element: <EditOrder />,
     },
     {
       path: 'produtos',
       element: <Products />,
+    },
+    {
+      path: 'clientes',
+      element: <Customers />,
+    },
+    {
+      path: 'clientes/criar',
+      element: <CreateCustomer />,
+    },
+    {
+      path: 'clientes/:id',
+      element: <ShowCustomer />,
     },
   ]);
 }

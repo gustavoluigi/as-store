@@ -1,6 +1,8 @@
+/* eslint-disable max-len */
 /* eslint-disable no-param-reassign */
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
 import Private from '../../../layout/Private';
@@ -24,11 +26,11 @@ function Orders() {
   };
 
   const handleTableClick = (orderId) => {
-    navigate(`../pedidos/${orderId}`, { replace: true });
+    navigate(`../vendas/${orderId}`, { replace: true });
   };
 
   const handleAddClick = () => {
-    navigate('../pedidos/criar', { replace: true });
+    navigate('../vendas/criar', { replace: true });
   };
 
   useEffect(() => {
@@ -41,7 +43,9 @@ function Orders() {
         Nova venda
       </Button>
       <PageTitle>Vendas</PageTitle>
-      <Table tableHeads={tableHeads} tableRows={orders} handleClick={handleTableClick} />
+      <Wrapper>
+        <Table tableHeads={tableHeads} tableRows={orders} hasSearch handleClick={handleTableClick} />
+      </Wrapper>
     </Private>
   );
 }

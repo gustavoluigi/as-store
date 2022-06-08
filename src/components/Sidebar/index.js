@@ -25,13 +25,13 @@ function Sidebar() {
           </NavLink>
         </Item>
         <Item className="group">
-          <NavLink to="/pedidos" href="#">
+          <NavLink to="/vendas" href="#">
             <HiOutlineShoppingCartStyled />
-            <span>Pedidos</span>
+            <span>Vendas</span>
           </NavLink>
         </Item>
         <Item className="group">
-          <NavLink to="/teste" href="#">
+          <NavLink to="/clientes" href="#">
             <HiOutlineUserGroupStyled />
             <span>Clientes</span>
           </NavLink>
