@@ -1,12 +1,10 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable max-len */
-/* eslint-disable react/jsx-one-expression-per-line */
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import BackButton from '../../../components/BackButton';
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
 import Private from '../../../layout/Private';
+import OrdersService from '../../../services/OrdersService';
 import formatPrice from '../../../utils/formatPrice';
 import { Details } from './styles';
 
@@ -17,24 +15,19 @@ function Order() {
   const [order, setOrder] = useState();
 
   const getOrder = async () => {
-    await fetch('/_mock/order_products.json')
-      .then((res) => res.json())
-      .then((json) => {
-        setOrder(json);
-
-        const filteredProducts = json.products.map((item) => ({
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-          color: item.color,
-          size: item.size,
-          brand: item.brand,
-          subtotal: formatPrice(item.quantity * item.price),
-        }));
-
-        setProducts(filteredProducts);
-      });
+    const orderDetails = await OrdersService.getOrderWithProductsAndCustomer(id);
+    setOrder(orderDetails);
+    const filteredProducts = orderDetails.order_products.map((item) => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      color: item.color,
+      size: item.size,
+      brand: item.brand,
+      subtotal: item.total,
+    }));
+    setProducts(filteredProducts);
   };
 
   useEffect(() => {
@@ -59,8 +52,12 @@ function Order() {
             <span>{order.qt_products}</span>
           </div>
           <div>
+            <p>Subtotal:</p>
+            <span>{formatPrice(order.subtotal)}</span>
+          </div>
+          <div>
             <p>Desconto:</p>
-            <span>{order.discount}%</span>
+            <span>{order.discount === 0 ? '-' : order.discount}%</span>
           </div>
           <div>
             <p>Valor total da compra:</p>

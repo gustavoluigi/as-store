@@ -7,22 +7,21 @@ import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
 import Private from '../../../layout/Private';
 import { AddIcon, Button } from './styles';
+import OrdersService from '../../../services/OrdersService';
 
 function Orders() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState();
-  const tableHeads = ['ID', 'Data', 'Qt. Produtos', 'Desconto', 'Total', 'Obs', 'Pagamento', 'Cliente'];
+  const tableHeads = ['ID', 'Data', 'Qt. Produtos', 'Subtotal', 'Desconto', 'Total', 'Obs', 'Pagamento', 'Cliente'];
 
-  const getOrders = async () => {
-    await fetch('_mock/orders.json')
-      .then((response) => response.json())
-      .then((json) => {
-        json.map((item) => {
-          item.discount = item.discount === 0 ? '-' : `${item.discount} %`;
-          return item;
-        });
-        setOrders(json);
-      });
+  const loadOrders = async () => {
+    const ordersList = await OrdersService.listOrdersWithCustomer();
+    ordersList.map((item) => {
+      item.name = item.customer.name;
+      delete item.customer;
+      return item;
+    });
+    setOrders(ordersList);
   };
 
   const handleTableClick = (orderId) => {
@@ -34,7 +33,7 @@ function Orders() {
   };
 
   useEffect(() => {
-    getOrders();
+    loadOrders();
   }, []);
   return (
     <Private>
