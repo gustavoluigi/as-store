@@ -4,6 +4,7 @@ import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
 import Private from '../../../layout/Private';
+import CustomersService from '../../../services/CustomersService';
 import { AddIcon, Button } from './styles';
 
 function Customers() {
@@ -12,11 +13,15 @@ function Customers() {
   const tableHeads = ['ID', 'Nome', 'Telefone', 'Endereço', 'CEP'];
 
   const getCustomers = async () => {
-    await fetch('/_mock/customers.json')
-      .then((response) => response.json())
-      .then((json) => {
-        setCustomers(json);
-      });
+    const customersList = await CustomersService.listCustomers()
+      .then((res) => res.map((item) => ({
+        id: item.id,
+        name: item.name,
+        phone: item.phone,
+        address: item.address,
+        zipcode: item.zipcode,
+      })));
+    setCustomers(customersList);
   };
 
   const handleTableClick = (customerId) => {

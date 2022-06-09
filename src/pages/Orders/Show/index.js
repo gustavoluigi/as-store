@@ -57,7 +57,7 @@ function Order() {
           </div>
           <div>
             <p>Desconto:</p>
-            <span>{order.discount === 0 ? '-' : order.discount}%</span>
+            <span>{order.discount === 0 ? '-' : `${order.discount} %`}</span>
           </div>
           <div>
             <p>Valor total da compra:</p>

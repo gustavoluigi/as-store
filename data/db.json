@@ -13,6 +13,13 @@
       "phone": "1399999999",
       "address": "Rua Lorem Ipsum",
       "zipcode": "11025011"
+    },
+    {
+      "name": "Victoria Flores",
+      "phone": "19997816799",
+      "address": "Rua Nabuco de Araújo, 491, ap 95",
+      "zipcode": "11025011",
+      "id": 3
     }
   ],
   "products": [

@@ -1,12 +1,16 @@
 /* eslint-disable max-len */
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Input from '../../../components/Form/Input';
 import PageTitle from '../../../components/PageTitle';
 
 import Private from '../../../layout/Private';
+import CustomersService from '../../../services/CustomersService';
+import { Toast, triggerToast } from '../../../utils/triggerToast';
 import { Button, Wrapper } from './styles';
 
 function CreateCustomer() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: null,
     phone: null,
@@ -14,13 +18,23 @@ function CreateCustomer() {
     zipcode: null,
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(formData);
+    await CustomersService.createCustomer(formData)
+      .then((res) => {
+        triggerToast('success', 'Cliente cadastrado com sucesso');
+        return res;
+      })
+      .then((res) => {
+        setTimeout(() => {
+          navigate(`/clientes/${res.id}`, { replace: true });
+        }, 2000);
+      });
   };
 
   return (
     <Private>
+      <Toast theme="colored" />
       <PageTitle>Novo cliente</PageTitle>
       <Wrapper>
         <form onSubmit={handleSubmit}>

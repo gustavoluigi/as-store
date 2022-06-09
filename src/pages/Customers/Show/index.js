@@ -1,15 +1,17 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate, useParams } from 'react-router-dom';
 import Input from '../../../components/Form/Input';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
 
 import Private from '../../../layout/Private';
+import CustomersService from '../../../services/CustomersService';
+import { triggerToast, Toast } from '../../../utils/triggerToast';
 import { Button, ButtonFloat, EditIcon } from './styles';
 
 function ShowCustomer() {
+  const navigate = useNavigate();
   const [enableEdit, setEnableEdit] = useState(false);
   const [customer, setCustomer] = useState({
     id: 0,
@@ -21,29 +23,29 @@ function ShowCustomer() {
   const { id } = useParams();
 
   const getCustomer = async () => {
-    await fetch('/_mock/customers.json')
-      .then((res) => res.json())
-      .then((json) => {
-        setCustomer(json.filter((item) => item.id === parseInt(id, 10))[0]);
-      });
+    const customerDetails = await CustomersService.getCustomer(id);
+
+    setCustomer(customerDetails);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    toast.success('Cliente editado com sucesso', {
-      position: 'top-center',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    await CustomersService.editCustomer(id, customer).then(triggerToast('success', 'Cliente editado com sucesso'));
     setEnableEdit(false);
   };
 
   const handleEnableEdit = () => {
     setEnableEdit(true);
+  };
+
+  const handleDelete = async () => {
+    await CustomersService.deleteCustomer(id)
+      .then(triggerToast('error', 'Cliente deletado'))
+      .finally(() => {
+        setTimeout(() => {
+          navigate('/clientes', { replace: true });
+        }, 2000);
+      });
   };
 
   useEffect(() => {
@@ -52,7 +54,11 @@ function ShowCustomer() {
 
   return (
     <Private>
-      <ToastContainer theme="colored" />
+      <Toast />
+      <ButtonFloat danger onClick={handleDelete}>
+        <EditIcon />
+        Deletar cliente
+      </ButtonFloat>
       <ButtonFloat onClick={handleEnableEdit}>
         <EditIcon />
         Editar cliente
