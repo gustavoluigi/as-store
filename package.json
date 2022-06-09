@@ -25,7 +25,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "api": "npx json-server --watch data/db.json --routes data/routes.json"
+    "api": "npx json-server --watch data/db.json --routes data/routes.json --port 3001"
   },
   "eslintConfig": {
     "extends": [
