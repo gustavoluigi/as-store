@@ -8,7 +8,9 @@ import CreateOrder from './pages/Orders/Create';
 import EditOrder from './pages/Orders/Edit';
 import Orders from './pages/Orders/List';
 import Order from './pages/Orders/Show';
+import CreateProduct from './pages/Products/Create';
 import Products from './pages/Products/List';
+import Product from './pages/Products/Show';
 
 export default function Router() {
   return useRoutes([
@@ -39,6 +41,14 @@ export default function Router() {
     {
       path: 'produtos',
       element: <Products />,
+    },
+    {
+      path: 'produtos/criar',
+      element: <CreateProduct />,
+    },
+    {
+      path: 'produtos/:id',
+      element: <Product />,
     },
     {
       path: 'clientes',

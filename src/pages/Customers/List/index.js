@@ -13,14 +13,7 @@ function Customers() {
   const tableHeads = ['ID', 'Nome', 'Telefone', 'Endereço', 'CEP'];
 
   const getCustomers = async () => {
-    const customersList = await CustomersService.listCustomers()
-      .then((res) => res.map((item) => ({
-        id: item.id,
-        name: item.name,
-        phone: item.phone,
-        address: item.address,
-        zipcode: item.zipcode,
-      })));
+    const customersList = await CustomersService.listCustomers();
     setCustomers(customersList);
   };
 

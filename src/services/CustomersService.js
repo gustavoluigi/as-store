@@ -3,7 +3,15 @@ import HttpClient from './utils/HttpClient';
 class CustomersService {
   async listCustomers() {
     const { data: response } = await HttpClient.get('/customers').then((res) => res);
-    return response;
+    const customersList = response.map((item) => ({
+      id: item.id,
+      name: item.name,
+      phone: item.phone,
+      address: item.address,
+      zipcode: item.zipcode,
+    }));
+
+    return customersList;
   }
 
   async getCustomer(customerId) {

@@ -1,24 +1,29 @@
 /* eslint-disable no-param-reassign */
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
 import Private from '../../../layout/Private';
+import ProductsService from '../../../services/ProductsService';
+import { AddIcon, Button } from './styles';
 
 function Products() {
+  const navigate = useNavigate();
   const [products, setProducts] = useState();
-  const tableHeads = ['ID', 'Nome', 'Preço', 'REF', 'Estoque', 'Obs', 'Cor', 'Tamanho', 'Marca'];
+  const tableHeads = ['ID', 'Nome', 'Preço', 'Tamanho', 'Cor', 'Marca', 'Descrição', 'Estoque', 'Referência', 'SKU'];
 
-  const getProducts = () => {
-    fetch('_mock/products.json')
-      .then((response) => response.json())
-      .then((json) => {
-        json.map((item) => {
-          delete item.cod;
-          return item;
-        });
-        setProducts(json);
-      });
+  const getProducts = async () => {
+    const productsList = await ProductsService.listProducts();
+    setProducts(productsList);
+  };
+
+  const handleTableClick = (productId) => {
+    navigate(`../produtos/${productId}`, { replace: true });
+  };
+
+  const handleAddClick = () => {
+    navigate('../produtos/criar', { replace: true });
   };
 
   useEffect(() => {
@@ -26,9 +31,18 @@ function Products() {
   }, []);
   return (
     <Private>
+      <Button onClick={handleAddClick}>
+        <AddIcon />
+        Novo produto
+      </Button>
       <PageTitle>Produtos</PageTitle>
       <Wrapper>
-        <Table tableHeads={tableHeads} tableRows={products} hasSearch />
+        <Table
+          tableHeads={tableHeads}
+          tableRows={products}
+          hasSearch
+          handleClick={handleTableClick}
+        />
       </Wrapper>
     </Private>
   );

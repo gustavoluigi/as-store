@@ -34,7 +34,7 @@ function CreateCustomer() {
 
   return (
     <Private>
-      <Toast theme="colored" />
+      <Toast />
       <PageTitle>Novo cliente</PageTitle>
       <Wrapper>
         <form onSubmit={handleSubmit}>
