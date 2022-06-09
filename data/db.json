@@ -1,0 +1,140 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Calça",
+      "price": 100,
+      "desc": "Descrição do produto - Calça",
+      "color": "Branca",
+      "size": "36",
+      "brand": "NK",
+      "storage": 5,
+      "ref": "123-NK",
+      "sku": "SKUCALCA"
+    },
+    {
+      "id": 2,
+      "name": "Camiseta",
+      "price": 50,
+      "desc": "Descrição do produto - Camiseta",
+      "color": "Preta",
+      "size": "M",
+      "brand": "Cris Barros",
+      "storage": 2,
+      "ref": "123-CB",
+      "sku": "SKUCAMISETA"
+    },
+    {
+      "id": 3,
+      "name": "Casaco",
+      "price": 400,
+      "desc": "Descrição do produto - Casaco",
+      "color": "Off White",
+      "size": "G",
+      "brand": "NK",
+      "storage": 1,
+      "ref": "123-NK",
+      "sku": "SKUCASACO"
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "date": "03/06/2022",
+      "qt_products": 2,
+      "subtotal": 550,
+      "discount": 10,
+      "total": 495,
+      "obs": "Observaçòes do pedido",
+      "transaction": "Cartão de crédito",
+      "customer": {
+        "id": 1,
+        "name": "Gustavo Luigi",
+        "phone": "13991589497",
+        "address": "Rua Nabuco de Araújo, 491, apto 95",
+        "zipcode": "11025011"
+      },
+      "products": [
+        {
+          "unit_price": 100,
+          "quantity": 1,
+          "total": 100,
+          "id": 1,
+          "name": "Calça",
+          "price": 100,
+          "desc": "Descrição do produto - Calça",
+          "color": "Branca",
+          "size": "36",
+          "brand": "NK",
+          "storage": 5,
+          "ref": "123-NK",
+          "sku": "SKUCALCA"
+        },
+        {
+          "unit_price": 50,
+          "quantity": 1,
+          "total": 50,
+          "id": 2,
+          "name": "Camiseta",
+          "price": 50,
+          "desc": "Descrição do produto - Camiseta",
+          "color": "Preta",
+          "size": "M",
+          "brand": "Cris Barros",
+          "storage": 2,
+          "ref": "123-CB",
+          "sku": "SKUCAMISETA"
+        },
+        {
+          "unit_price": 400,
+          "quantity": 1,
+          "total": 400,
+          "id": 3,
+          "name": "Casaco",
+          "price": 400,
+          "desc": "Descrição do produto - Casaco",
+          "color": "Off White",
+          "size": "G",
+          "brand": "NK",
+          "storage": 1,
+          "ref": "123-NK",
+          "sku": "SKUCASACO"
+        }
+      ]
+    }
+  ],
+  "customers": [
+    {
+      "id": 1,
+      "name": "Gustavo Luigi",
+      "phone": "13991589497",
+      "address": "Rua Nabuco de Araújo, 491, apto 95",
+      "zipcode": "11025011"
+    },
+    {
+      "id": 2,
+      "name": "Victor Henrique",
+      "phone": "1399999999",
+      "address": "Rua Lorem Ipsum",
+      "zipcode": "11025011"
+    }
+  ],
+  "transactions": [
+    {
+      "id": 1,
+      "type": "Cartão de crédito"
+    },
+    {
+      "id": 2,
+      "type": "Dinheiro"
+    },
+    {
+      "id": 3,
+      "type": "Cheque"
+    },
+    {
+      "id": 4,
+      "type": "Transferência"
+    }
+  ]
+}
