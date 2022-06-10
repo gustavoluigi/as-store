@@ -2,7 +2,7 @@ import HttpClient from './utils/HttpClient';
 
 class TransactionsService {
   async listTransactions() {
-    const response = await HttpClient.get('/transactions').then((res) => res);
+    const { data: response } = await HttpClient.get('/transactions').then((res) => res);
     return response;
   }
 
@@ -17,7 +17,7 @@ class TransactionsService {
   }
 
   async deleteTransaction(transactionId) {
-    const response = await HttpClient.post('/transactions', transactionId).then((res) => res);
+    const response = await HttpClient.delete('/transactions', transactionId).then((res) => res);
     return response;
   }
 }

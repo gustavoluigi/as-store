@@ -4,11 +4,17 @@ import HttpClient from './utils/HttpClient';
 class OrdersService {
   async listOrders() {
     const { data: response } = await HttpClient.get('/orders').then((res) => res);
-    response.map((item) => {
-      delete item.customerId;
-      return item;
-    });
-    return response;
+    const orderList = response.map((item) => ({
+      id: item.id,
+      date: item.date,
+      qt_products: item.qt_products,
+      subtotal: item.subtotal,
+      discount: item.discount,
+      total: item.total,
+      obs: item.obs,
+      transaction: item.transaction,
+    }));
+    return orderList;
   }
 
   async listOrdersWithCustomer() {
@@ -17,6 +23,7 @@ class OrdersService {
       delete item.customerId;
       return item;
     });
+    // console.log(response);
     return response;
   }
 
@@ -71,8 +78,15 @@ class OrdersService {
     return response;
   }
 
-  async createOrder(order) {
-    const response = await HttpClient.post('/orders', order).then((res) => res);
+  async createOrder(order, products) {
+    const { data: response } = await HttpClient.post('/orders', order).then((res) => res);
+
+    const orderProducts = products.map((e) => ({ orderId: response.id, ...e }));
+
+    orderProducts.map(async (e) => {
+      await HttpClient.post('/order_products', e).then((res) => res);
+    });
+
     return response;
   }
 

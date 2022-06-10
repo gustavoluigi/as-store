@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import BackButton from '../../../components/BackButton';
 import Input from '../../../components/Form/Input';
 import Modal from '../../../components/Modal';
@@ -16,11 +15,8 @@ import formatPrice from '../../../utils/formatPrice';
 import CustomersService from '../../../services/CustomersService';
 import TransactionsService from '../../../services/TransactionsService';
 import ProductsService from '../../../services/ProductsService';
-import OrdersService from '../../../services/OrdersService';
-import { triggerToast } from '../../../utils/triggerToast';
 
 function CreateOrder() {
-  const navigate = useNavigate();
   const tableHeadsSelectedProducts = ['ID', 'Nome', 'Preço', 'Cor', 'Tamanho', 'Marca', 'Quantidade', 'Subtotal'];
   const tableHeads = ['ID', 'Nome', 'Preço', 'Tamanho', 'Cor', 'Marca', 'Descrição', 'Estoque', 'Referência', 'SKU'];
   const [customers, setCustomers] = useState([]);
@@ -31,15 +27,21 @@ function CreateOrder() {
 
   // Form fields
   const [selectedProducts, setSelectedProducts] = useState([]);
-  const [orderData, setOrderData] = useState({
+  const [formData, setFormData] = useState({
+    customer: {
+      id: null,
+      name: null,
+    },
     date: null,
+    transaction: {
+      id: null,
+      type: null,
+    },
     qt_products: 0,
-    subtotal: 0,
-    discount: 0,
-    total: 0,
+    discount: null,
     obs: null,
-    transaction: null,
-    customerId: null,
+    total: 0,
+    products: [],
   });
 
   const getCustomers = async () => {
@@ -67,61 +69,51 @@ function CreateOrder() {
     setProducts(productsList);
   };
 
-  const updateTotal = () => {
-    setOrderData((prevState) => ({
-      ...prevState,
-      total: prevState.subtotal - prevState.subtotal * (prevState.discount / 100),
-    }));
+  const handleOpenSummaryModal = () => {
+    setOpenSummaryModal(true);
+    console.log(formData);
   };
 
   const handleSelectProduct = (id, checked) => {
     const product = products.filter((item) => item.id === id)[0];
-    const checkAlreadyOnList = selectedProducts.map((item) => item.id === id).includes(true);
-    if (checked && !checkAlreadyOnList) {
-      setSelectedProducts((prevState) => [
-        ...prevState,
-        {
-          id: product.id,
-          name: product.name,
-          price: parseInt(product.price, 10),
-          color: product.color,
-          size: product.size,
-          brand: product.brand,
-          quantity: 1,
-          subtotal: parseInt(product.price, 10),
-          checked: true,
-        },
-      ]);
-      setOrderData((prevState) => ({
+    const filteredProduct = [product].map((item) => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      color: item.id_color,
+      size: item.id_size,
+      brand: item.id_brand,
+      quantity: 1,
+      subtotal: 1 * item.price,
+    }));
+    if (checked) {
+      setFormData((prevState) => ({
         ...prevState,
         qt_products: prevState.qt_products + 1,
-        subtotal: prevState.subtotal + product.price,
+        total: prevState.total + filteredProduct[0].subtotal,
+        products: [...prevState.products, filteredProduct[0]],
       }));
-      updateTotal();
-    } else if (!checkAlreadyOnList) {
-      setOrderData((prevState) => ({
+      setSelectedProducts((prevState) => [...prevState, { ...filteredProduct[0], checked: true }]);
+    } else {
+      setFormData((prevState) => ({
         ...prevState,
         qt_products: prevState.qt_products - 1,
-        subtotal: prevState.subtotal - product.price,
+        total: prevState.total - filteredProduct[0].subtotal,
+        products: [...prevState.products.filter((item) => item.id !== id)],
       }));
-      updateTotal();
       setSelectedProducts((prevState) => [...prevState.filter((item) => item.id !== id)]);
     }
   };
 
   const handleUnselectProduct = (id) => {
     const product = selectedProducts.filter((item) => item.id === id)[0];
-    setOrderData((prevState) => ({
+    setFormData((prevState) => ({
       ...prevState,
       qt_products: prevState.qt_products - product.quantity,
-      subtotal: prevState.subtotal - product.subtotal,
+      total: prevState.total - product.subtotal,
+      products: [...prevState.products.filter((item) => item.id !== id)],
     }));
-    updateTotal();
     setSelectedProducts((prevState) => [...prevState.filter((item) => item.id !== id)]);
-  };
-
-  const handleOpenSummaryModal = () => {
-    setOpenSummaryModal(true);
   };
 
   const handleUpdateQt = (id, newQt) => {
@@ -133,32 +125,17 @@ function CreateOrder() {
       quantity: parseInt(newQt, 10),
       subtotal: newSelectedProducts[index].price * newQt,
     };
-    setOrderData((prevState) => ({
+    setFormData((prevState) => ({
       ...prevState,
       qt_products: prevState.qt_products - product.quantity + newSelectedProducts[index].quantity,
-      subtotal: prevState.subtotal - product.subtotal + newSelectedProducts[index].subtotal,
+      total: prevState.total - product.subtotal + newSelectedProducts[index].subtotal,
+      products: newSelectedProducts,
     }));
-    updateTotal();
     setSelectedProducts(newSelectedProducts);
   };
 
-  const handleSubmit = async (ev) => {
-    ev.preventDefault();
-    const orderProductsList = selectedProducts.map((e, i) => ({
-      unit_price: selectedProducts[i].price,
-      quantity: e.quantity,
-      total: selectedProducts[i].price * e.quantity,
-      productId: selectedProducts[i].id,
-    }));
-    await OrdersService.createOrder(orderData, orderProductsList).then((res) => {
-      triggerToast('success', 'Produto cadastrado com sucesso');
-      return res;
-    })
-      .then((res) => {
-        setTimeout(() => {
-          navigate(`/vendas/${res.id}`, { replace: true });
-        }, 2000);
-      });
+  const handleSubmit = (e) => {
+    e.preventDefault();
   };
 
   useEffect(() => {
@@ -179,35 +156,35 @@ function CreateOrder() {
         <Details>
           <div>
             <p>Nome do cliente:</p>
-            <span>{customers.filter((i) => i.value === orderData.customerId)[0]?.label}</span>
+            <span>{formData.customer.name ? formData.customer.name : 'Não selecionado'}</span>
           </div>
           <div>
             <p>Data da compra:</p>
-            <span>{orderData?.date}</span>
+            <span>{formData.date ? formData.date : 'Não selecionado'}</span>
           </div>
           <div>
             <p>Quantidade de produtos:</p>
-            <span>{orderData.qt_products}</span>
+            <span>{selectedProducts.length}</span>
           </div>
           <div>
-            <p>Subtotal da compra:</p>
-            <span>{formatPrice(orderData.subtotal)}</span>
+            <p>Valor total da compra:</p>
+            <span>{formatPrice(formData.total)}</span>
           </div>
           <div>
             <p>Desconto:</p>
-            <span>{orderData.discount}%</span>
+            <span>{formData.discount ? formData.discount : 0}%</span>
           </div>
           <div>
             <p>Valor final:</p>
-            <span>{formatPrice(orderData.total)}</span>
+            <span>{formatPrice(formData.total - formData.total * (formData.discount / 100))}</span>
           </div>
           <div>
             <p>Forma de pagamento:</p>
-            <span>{orderData?.transaction}</span>
+            <span>{formData.transaction.type ? formData.transaction.type : 'Não selecionado'}</span>
           </div>
           <div>
             <p>Obersações:</p>
-            <span>{orderData?.obs}</span>
+            <span>{formData.obs ? formData.obs : '-'}</span>
           </div>
         </Details>
         <Button onClick={handleSubmit}>Confirmar</Button>
@@ -216,47 +193,90 @@ function CreateOrder() {
       <BackButton />
       <PageTitle>Novo pedido</PageTitle>
       <Wrapper>
-        <form>
+        {/* <Details>
+          <div>
+            <p>Nome do cliente:</p>
+            <span>{formData.customer.name ? formData.customer.name : 'Não selecionado'}</span>
+          </div>
+          <div>
+            <p>Data da compra:</p>
+            <span>{formData.date ? formData.date : 'Não selecionado'}</span>
+          </div>
+          <div>
+            <p>Quantidade de produtos:</p>
+            <span>{formData.qt_products}</span>
+          </div>
+          <div>
+            <p>Valor total da compra:</p>
+            <span>{formatPrice(formData.total)}</span>
+          </div>
+          <div>
+            <p>Desconto:</p>
+            <span>
+              {formData.discount ? formData.discount : 0}
+              %
+            </span>
+          </div>
+          <div>
+            <p>Valor final:</p>
+            <span>{formatPrice(formData.total - formData.total * (formData.discount / 100))}</span>
+          </div>
+          <div>
+            <p>Forma de pagamento:</p>
+            <span>{formData.transaction.type ? formData.transaction.type : 'Não selecionado'}</span>
+          </div>
+          <div>
+            <p>Obersações:</p>
+            <span>{formData.obs ? formData.obs : '-'}</span>
+          </div>
+        </Details> */}
+        <form onSubmit={handleSubmit}>
           <Select
             label="Cliente"
             options={customers}
-            value={customers.filter((item) => item.id === orderData.customerId).id}
-            onChange={(event) => setOrderData((prevState) => ({ ...prevState, customerId: parseInt(event.target.value, 10) }))}
+            value={formData.customer.id ? formData.customer.id : ''}
+            onChange={(event) => setFormData((prevState) => ({
+              ...prevState,
+              customer: {
+                id: parseInt(event.target.value, 10),
+                name: customers.filter((item) => item.value === parseInt(event.target.value, 10))[0].label,
+              },
+            }))}
           />
           <Input
             label="Data"
             id="date"
             name="date"
             type="date"
-            value={orderData.date ? orderData.date : ''}
-            onChange={(event) => setOrderData((prevState) => ({ ...prevState, date: event.target.value }))}
+            value={formData.date ? formData.date : ''}
+            onChange={(event) => setFormData((prevState) => ({ ...prevState, date: event.target.value }))}
           />
           <Select
             label="Forma de pagamento"
             options={transactions}
-            defaultValue={orderData.transaction ? orderData.transaction : ''}
-            onChange={(event) => setOrderData((prevState) => ({
+            defaultValue={formData.transaction ? formData.transaction : ''}
+            onChange={(event) => setFormData((prevState) => ({
               ...prevState,
-              transaction: transactions.filter((i) => i.value === parseInt(event.target.value, 10))[0].label,
+              transaction: {
+                id: parseInt(event.target.value, 10),
+                type: transactions.filter((item) => item.value === parseInt(event.target.value, 10))[0].label,
+              },
             }))}
           />
           <Input
             label="Desconto (%)"
             id="discount"
             name="discount"
-            type="text"
-            value={orderData.discount ? orderData.discount : 0}
-            onChange={(event) => {
-              setOrderData((prevState) => ({ ...prevState, discount: parseInt(event.target.value, 10) }));
-              updateTotal();
-            }}
+            type="discount"
+            value={formData.discount ? formData.discount : ''}
+            onChange={(event) => setFormData((prevState) => ({ ...prevState, discount: event.target.value }))}
           />
           <Textarea
             label="Observações"
             id="obs"
             name="obs"
-            value={orderData.obs ? orderData.obs : ''}
-            onChange={(event) => setOrderData((prevState) => ({ ...prevState, obs: event.target.value }))}
+            value={formData.obs ? formData.obs : ''}
+            onChange={(event) => setFormData((prevState) => ({ ...prevState, obs: event.target.value }))}
           />
           <Button type="button" onClick={() => setOpenModal(true)}>
             <AddIcon />
@@ -271,6 +291,7 @@ function CreateOrder() {
             qtEditable
             updateQt={handleUpdateQt}
           />
+          <button type="submit">enviar</button>
         </form>
         <Button onClick={handleOpenSummaryModal}>Finalizar pedido</Button>
       </Wrapper>

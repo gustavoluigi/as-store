@@ -16,12 +16,19 @@ function Orders() {
 
   const loadOrders = async () => {
     const ordersList = await OrdersService.listOrdersWithCustomer();
-    ordersList.map((item) => {
-      item.name = item.customer.name;
-      delete item.customer;
-      return item;
-    });
-    setOrders(ordersList);
+
+    const filteredOrdersList = ordersList.map((i) => ({
+      id: i.id,
+      date: i.date,
+      qt_products: i.qt_products,
+      subtotal: i.subtotal,
+      discount: i.discount,
+      total: i.total,
+      obs: i.obs,
+      transaction: i.transaction,
+      name: i.customer.name,
+    }));
+    setOrders(filteredOrdersList);
   };
 
   const handleTableClick = (orderId) => {
