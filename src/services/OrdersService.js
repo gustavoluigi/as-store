@@ -84,7 +84,10 @@ class OrdersService {
     const orderProducts = products.map((e) => ({ orderId: response.id, ...e }));
 
     orderProducts.map(async (e) => {
-      await HttpClient.post('/order_products', e).then((res) => res);
+      await HttpClient.post('/order_products', e).then(async (res) => {
+        const qt = await HttpClient.get(`/products/${res.data.productId}`);
+        await HttpClient.patch(`/products/${e.productId}`, { storage: qt.data.storage - res.data.quantity });
+      });
     });
 
     return response;

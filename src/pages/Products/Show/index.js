@@ -24,7 +24,7 @@ function Product() {
     color: '',
     size: '',
     brand: '',
-    storage: '',
+    storage: 0,
     ref: '',
     sku: '',
   });
@@ -134,7 +134,7 @@ function Product() {
             type="text"
             readOnly={!enableEdit}
             value={product.storage ? product.storage : ''}
-            onChange={(event) => setProduct((prevState) => ({ ...prevState, storage: event.target.value }))}
+            onChange={(event) => setProduct((prevState) => ({ ...prevState, storage: parseInt(event.target.value, 10) }))}
           />
           <Input
             label="Referência"

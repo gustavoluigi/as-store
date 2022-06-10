@@ -31,7 +31,7 @@
       "color": "Branca",
       "size": "36",
       "brand": "NK",
-      "storage": 5,
+      "storage": 1,
       "ref": "123-NK",
       "sku": "SKUCALCA"
     },
@@ -43,7 +43,7 @@
       "color": "Preta",
       "size": "M",
       "brand": "Cris Barros",
-      "storage": 2,
+      "storage": 15,
       "ref": "123-CB",
       "sku": "SKUCAMISETA"
     },
