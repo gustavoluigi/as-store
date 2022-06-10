@@ -11,6 +11,8 @@ import Order from './pages/Orders/Show';
 import CreateProduct from './pages/Products/Create';
 import Products from './pages/Products/List';
 import Product from './pages/Products/Show';
+import Reports from './pages/Reports';
+import CreatePDF from './pages/Reports/CreatePDF';
 
 export default function Router() {
   return useRoutes([
@@ -61,6 +63,14 @@ export default function Router() {
     {
       path: 'clientes/:id',
       element: <ShowCustomer />,
+    },
+    {
+      path: 'relatorios',
+      element: <Reports />,
+    },
+    {
+      path: 'pdf',
+      element: <CreatePDF />,
     },
   ]);
 }

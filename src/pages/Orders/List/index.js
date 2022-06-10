@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-/* eslint-disable no-param-reassign */
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Wrapper } from '../../../components/Layout/Wrapper';
@@ -8,6 +7,7 @@ import Table from '../../../components/Table';
 import Private from '../../../layout/Private';
 import { AddIcon, Button } from './styles';
 import OrdersService from '../../../services/OrdersService';
+import formatDate from '../../../utils/formatDate';
 
 function Orders() {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ function Orders() {
 
     const filteredOrdersList = ordersList.map((i) => ({
       id: i.id,
-      date: i.date,
+      date: formatDate(i.date),
       qt_products: i.qt_products,
       subtotal: i.subtotal,
       discount: i.discount,

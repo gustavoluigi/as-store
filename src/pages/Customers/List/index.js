@@ -5,6 +5,7 @@ import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
 import Private from '../../../layout/Private';
 import CustomersService from '../../../services/CustomersService';
+import formatPhone from '../../../utils/formatPhone';
 import { AddIcon, Button } from './styles';
 
 function Customers() {
@@ -13,7 +14,10 @@ function Customers() {
   const tableHeads = ['ID', 'Nome', 'Telefone', 'Endereço', 'CEP'];
 
   const getCustomers = async () => {
-    const customersList = await CustomersService.listCustomers();
+    const customersList = await CustomersService.listCustomers().then((res) => res.map((i) => ({
+      ...i,
+      phone: formatPhone(i.phone),
+    })));
     setCustomers(customersList);
   };
 

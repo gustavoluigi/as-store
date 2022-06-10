@@ -43,7 +43,7 @@ function Sidebar() {
           </NavLink>
         </Item>
         <Item className="group">
-          <NavLink to="/teste" href="#">
+          <NavLink to="/relatorios" href="#">
             <HiOutlineDocumentTextStyled />
             <span>Relatórios</span>
           </NavLink>

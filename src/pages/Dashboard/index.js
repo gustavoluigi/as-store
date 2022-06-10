@@ -1,15 +1,14 @@
+import { Wrapper } from '../../components/Layout/Wrapper';
+import PageTitle from '../../components/PageTitle';
 import Private from '../../layout/Private';
-import ProductsService from '../../services/ProductsService';
 
 function Dashboard() {
-  const loadProducts = async () => {
-    const productsList = await ProductsService.listProducts();
-    console.log(productsList);
-  };
-  loadProducts();
   return (
     <Private>
-      <h1>Dashboard</h1>
+      <PageTitle>Dashboard</PageTitle>
+      <Wrapper>
+        teste
+      </Wrapper>
     </Private>
   );
 }
