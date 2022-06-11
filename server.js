@@ -7,7 +7,7 @@ const router = jsonServer.router('./data/db.json');
 // });
 const middlewares = jsonServer.defaults();
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 server.use(middlewares);
 
 server.use(
