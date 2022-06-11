@@ -1,6 +1,6 @@
 import { ToastContainer, toast } from 'react-toastify';
 
-export function triggerToast(type, msg) {
+export const triggerToast = (type, msg) => {
   const toastConfig = {
     position: 'top-center',
     autoClose: 5000,
@@ -21,7 +21,7 @@ export function triggerToast(type, msg) {
     default:
       toast(msg, toastConfig);
   }
-}
+};
 
 export function Toast() {
   return <ToastContainer theme="colored" />;

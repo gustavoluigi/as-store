@@ -133,7 +133,7 @@ function Product() {
             name="storage"
             type="text"
             readOnly={!enableEdit}
-            value={product.storage ? product.storage : ''}
+            value={product.storage}
             onChange={(event) => setProduct((prevState) => ({ ...prevState, storage: parseInt(event.target.value, 10) }))}
           />
           <Input

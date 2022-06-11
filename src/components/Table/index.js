@@ -8,10 +8,10 @@ import {
 } from './styles';
 import Input from '../Form/Input';
 
-import formatPrice from '../../utils/formatPrice';
+import { formatPrice } from '../../utils';
 
 function Table({
-  tableHeads, tableRows, handleClick, hasSearch, hasSelection, handleSelect, qtEditable, updateQt,
+  tableHeads, tableRows, handleClick, hasSearch, searchField, hasSelection, handleSelect, qtEditable, updateQt,
 }) {
   const [filteredTableRows, setFilteredTableRows] = useState(tableRows);
 
@@ -19,7 +19,7 @@ function Table({
     if (!searchTerm) {
       setFilteredTableRows(tableRows);
     } else {
-      setFilteredTableRows(tableRows.filter((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase())));
+      setFilteredTableRows(tableRows.filter((item) => item[searchField].toLowerCase().includes(searchTerm.toLowerCase())));
     }
   };
 
@@ -166,6 +166,7 @@ Table.propTypes = {
   handleClick: PropTypes.func,
   handleSelect: PropTypes.func,
   hasSearch: PropTypes.bool,
+  searchField: PropTypes.string,
   hasSelection: PropTypes.bool,
   qtEditable: PropTypes.bool,
   updateQt: PropTypes.func,
@@ -176,6 +177,7 @@ Table.defaultProps = {
   handleClick: () => {},
   handleSelect: () => {},
   hasSearch: false,
+  searchField: 'name',
   hasSelection: false,
   qtEditable: false,
   updateQt: () => {},

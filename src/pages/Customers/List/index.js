@@ -5,7 +5,7 @@ import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
 import Private from '../../../layout/Private';
 import CustomersService from '../../../services/CustomersService';
-import formatPhone from '../../../utils/formatPhone';
+import { formatPhone } from '../../../utils';
 import { AddIcon, Button } from './styles';
 
 function Customers() {

@@ -1,9 +1,11 @@
 import { Outlet, useRoutes } from 'react-router-dom';
+import DeliveryList from './components/Delivery/List';
 import Login from './pages/Auth/Login';
 import CreateCustomer from './pages/Customers/Create';
 import Customers from './pages/Customers/List';
 import ShowCustomer from './pages/Customers/Show';
 import Dashboard from './pages/Dashboard';
+import Goals from './pages/Goals/List';
 import CreateOrder from './pages/Orders/Create';
 import EditOrder from './pages/Orders/Edit';
 import Orders from './pages/Orders/List';
@@ -71,6 +73,14 @@ export default function Router() {
     {
       path: 'relatorio-mensal/:month/:year',
       element: <MonthStatsPDF />,
+    },
+    {
+      path: 'metas',
+      element: <Goals />,
+    },
+    {
+      path: 'delivery',
+      element: <DeliveryList />,
     },
   ]);
 }

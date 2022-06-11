@@ -12,12 +12,11 @@ import Private from '../../../layout/Private';
 import {
   AddIcon, Button, Details, Wrapper,
 } from './styles';
-import formatPrice from '../../../utils/formatPrice';
 import CustomersService from '../../../services/CustomersService';
 import TransactionsService from '../../../services/TransactionsService';
 import ProductsService from '../../../services/ProductsService';
 import OrdersService from '../../../services/OrdersService';
-import { triggerToast } from '../../../utils/triggerToast';
+import { triggerToast, formatPrice } from '../../../utils';
 
 function CreateOrder() {
   const navigate = useNavigate();

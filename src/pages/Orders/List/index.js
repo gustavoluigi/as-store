@@ -7,7 +7,7 @@ import Table from '../../../components/Table';
 import Private from '../../../layout/Private';
 import { AddIcon, Button } from './styles';
 import OrdersService from '../../../services/OrdersService';
-import formatDate from '../../../utils/formatDate';
+import { formatDate } from '../../../utils';
 
 function Orders() {
   const navigate = useNavigate();

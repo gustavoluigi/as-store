@@ -6,8 +6,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import StatsService from '../../services/StatsService';
-import formatDate from '../../utils/formatDate';
-import formatPrice from '../../utils/formatPrice';
+import { formatDate, formatPrice } from '../../utils';
 import asLogo from '../../assets/images/as-logo.png';
 
 // Create styles

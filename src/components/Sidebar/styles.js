@@ -4,6 +4,8 @@ import {
   HiOutlineShoppingCart,
   HiOutlineUserGroup,
   HiOutlineDocumentText,
+  HiOutlinePresentationChartLine,
+  HiShoppingBag,
 } from 'react-icons/hi';
 import styled from 'styled-components';
 import tw from 'twin.macro';
@@ -44,5 +46,11 @@ export const HiOutlineUserGroupStyled = styled(HiOutlineUserGroup)`
   ${tw`h-5 w-5 text-black group-hover:text-white transition dark:text-white`}
 `;
 export const HiOutlineDocumentTextStyled = styled(HiOutlineDocumentText)`
+  ${tw`h-5 w-5 text-black group-hover:text-white transition dark:text-white`}
+`;
+export const HiOutlinePresentationChartLineStyled = styled(HiOutlinePresentationChartLine)`
+  ${tw`h-5 w-5 text-black group-hover:text-white transition dark:text-white`}
+`;
+export const HiShoppingBagStyled = styled(HiShoppingBag)`
   ${tw`h-5 w-5 text-black group-hover:text-white transition dark:text-white`}
 `;

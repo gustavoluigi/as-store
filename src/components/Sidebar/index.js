@@ -4,9 +4,11 @@ import {
   Container,
   HiOutlineAdjustmentsStyled,
   HiOutlineDocumentTextStyled,
+  HiOutlinePresentationChartLineStyled,
   HiOutlineShoppingBagStyled,
   HiOutlineShoppingCartStyled,
   HiOutlineUserGroupStyled,
+  HiShoppingBagStyled,
   Img,
   Item,
   List,
@@ -46,6 +48,18 @@ function Sidebar() {
           <NavLink to="/relatorios" href="#">
             <HiOutlineDocumentTextStyled />
             <span>Relatórios</span>
+          </NavLink>
+        </Item>
+        <Item className="group">
+          <NavLink to="/metas" href="#">
+            <HiOutlinePresentationChartLineStyled />
+            <span>Metas</span>
+          </NavLink>
+        </Item>
+        <Item className="group">
+          <NavLink to="/delivery" href="#">
+            <HiShoppingBagStyled />
+            <span>Delivery</span>
           </NavLink>
         </Item>
       </List>

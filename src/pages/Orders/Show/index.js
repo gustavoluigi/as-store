@@ -5,7 +5,7 @@ import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
 import Private from '../../../layout/Private';
 import OrdersService from '../../../services/OrdersService';
-import formatPrice from '../../../utils/formatPrice';
+import { formatPrice } from '../../../utils';
 import { Details } from './styles';
 
 function Order() {
