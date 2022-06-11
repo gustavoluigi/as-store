@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import tw from 'twin.macro';
 
 export const Container = styled.div`
-   ${tw`w-full md:w-1/5 border-r-2 border-r-gray-200 md:min-h-screen dark:bg-gray-900`}
+   ${tw`w-full md:w-1/5 border-r-2 border-r-gray-100 bg-white md:min-h-screen dark:bg-gray-900`}
 `;
 
 export const Img = styled.img`
@@ -19,7 +19,7 @@ export const Img = styled.img`
 `;
 
 export const List = styled.ul`
-  ${tw`px-4 border-t-2 border-t-gray-200 mt-10 pt-4`}
+  ${tw`px-4 border-t-2 border-t-gray-100 mt-10 pt-4`}
 `;
 
 export const Item = styled.li`

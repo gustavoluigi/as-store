@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 import HttpClient from './utils/HttpClientNew';
@@ -18,6 +19,31 @@ class GoalsService {
     }));
 
     return newGoals;
+  }
+
+  async getCurrentGoalsAndOrders() {
+    const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+    const currentYear = new Date().getFullYear();
+
+    const stats = await HttpClient.get(`/goals?month=${currentMonth}`);
+    const orders = await HttpClient.get(`/orders?date_like=${currentYear}-${currentMonth}&_expand=customer`);
+
+    const response = {
+      stats,
+      orders,
+    };
+    // const goals = await HttpClient.get(`/goals?month=${currentMonth}&year=${currentYear}`);
+    // // console.log(goals);
+
+    // const currentMonthOrders = await HttpClient.get(`/orders?date_like=${currentYear}-${currentMonth}&_expand=customer`);
+
+    // const response = {
+    //   goals,
+    //   currentMonthOrders,
+    // };
+    // return response;
+
+    return response;
   }
 
   async createGoal(goal) {

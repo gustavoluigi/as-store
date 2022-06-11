@@ -19,18 +19,18 @@ module.exports = function override(config, env) {
     asset: require.resolve('assert'),
   };
 
-  config.resolve = {
-    ...config.resolve,
-    extensions: ['.jsx', '.js'],
-    alias: {
-      ...config.resolve.alias,
-      Utils: path.resolve(__dirname, 'src/utils'),
-      Components: path.resolve(__dirname, 'src/components/'),
-      Layout: path.resolve(__dirname, 'src/layout'),
-      Pages: path.resolve(__dirname, 'src/pages'),
-      Services: path.resolve(__dirname, 'src/services'),
-    },
-  };
+  // config.resolve = {
+  //   ...config.resolve,
+  //   extensions: ['.jsx', '.js'],
+  //   alias: {
+  //     ...config.resolve.alias,
+  //     Utils: path.resolve(__dirname, 'src/utils'),
+  //     Components: path.resolve(__dirname, 'src/components/'),
+  //     Layout: path.resolve(__dirname, 'src/layout'),
+  //     Pages: path.resolve(__dirname, 'src/pages'),
+  //     Services: path.resolve(__dirname, 'src/services'),
+  //   },
+  // };
 
   return config;
 };
