@@ -39,5 +39,16 @@
     ],
     "class-methods-use-this": "off",
     "react/jsx-one-expression-per-line": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": [
+        ["Utils", "./src/utils"],
+        ["Components", "./src/components"],
+        ["Layout", "./src/layout"],
+        ["Pages", "./src/layout"],
+        ["Services", "./src/services"]
+      ]
+    }
   }
 }

@@ -5,6 +5,7 @@ import CreateCustomer from './pages/Customers/Create';
 import Customers from './pages/Customers/List';
 import ShowCustomer from './pages/Customers/Show';
 import Dashboard from './pages/Dashboard';
+import CreateGoal from './pages/Goals/Create/index';
 import Goals from './pages/Goals/List';
 import CreateOrder from './pages/Orders/Create';
 import EditOrder from './pages/Orders/Edit';
@@ -77,6 +78,10 @@ export default function Router() {
     {
       path: 'metas',
       element: <Goals />,
+    },
+    {
+      path: 'metas/criar',
+      element: <CreateGoal />,
     },
     {
       path: 'delivery',
