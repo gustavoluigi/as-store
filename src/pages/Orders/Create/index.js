@@ -63,7 +63,8 @@ function CreateOrder() {
 
   const getProducts = async () => {
     const productsList = await ProductsService.listProducts();
-    setProducts(productsList);
+    const filteredProductsList = productsList.filter((product) => product.storage > 0);
+    setProducts(filteredProductsList);
   };
 
   const updateTotal = () => {
@@ -82,26 +83,26 @@ function CreateOrder() {
         {
           id: product.id,
           name: product.name,
-          price: parseInt(product.price, 10),
+          price: parseFloat(product.price),
           color: product.color,
           size: product.size,
           brand: product.brand,
           quantity: 1,
-          subtotal: parseInt(product.price, 10),
+          subtotal: parseFloat(product.price),
           checked: true,
         },
       ]);
       setOrderData((prevState) => ({
         ...prevState,
-        qt_products: prevState.qt_products + 1,
-        subtotal: prevState.subtotal + product.price,
+        qt_products: parseInt(prevState.qt_products, 10) + 1,
+        subtotal: parseFloat(prevState.subtotal) + parseFloat(product.price),
       }));
       updateTotal();
     } else if (!checkAlreadyOnList) {
       setOrderData((prevState) => ({
         ...prevState,
-        qt_products: prevState.qt_products - 1,
-        subtotal: prevState.subtotal - product.price,
+        qt_products: parseInt(prevState.qt_products, 10) - 1,
+        subtotal: parseFloat(prevState.subtotal) - parseFloat(product.price),
       }));
       updateTotal();
       setSelectedProducts((prevState) => [...prevState.filter((item) => item.id !== id)]);
@@ -112,8 +113,8 @@ function CreateOrder() {
     const product = selectedProducts.filter((item) => item.id === id)[0];
     setOrderData((prevState) => ({
       ...prevState,
-      qt_products: prevState.qt_products - product.quantity,
-      subtotal: prevState.subtotal - product.subtotal,
+      qt_products: parseInt(prevState.qt_products, 10) - parseInt(product.quantity, 10),
+      subtotal: parseFloat(prevState.subtotal) - parseFloat(product.subtotal),
     }));
     updateTotal();
     setSelectedProducts((prevState) => [...prevState.filter((item) => item.id !== id)]);
@@ -130,12 +131,12 @@ function CreateOrder() {
     newSelectedProducts[index] = {
       ...newSelectedProducts[index],
       quantity: parseInt(newQt, 10),
-      subtotal: newSelectedProducts[index].price * newQt,
+      subtotal: parseFloat(newSelectedProducts[index].price) * newQt,
     };
     setOrderData((prevState) => ({
       ...prevState,
-      qt_products: prevState.qt_products - product.quantity + newSelectedProducts[index].quantity,
-      subtotal: prevState.subtotal - product.subtotal + newSelectedProducts[index].subtotal,
+      qt_products: parseInt(prevState.qt_products, 10) - parseInt(product.quantity, 10) + parseInt(newSelectedProducts[index].quantity, 10),
+      subtotal: parseFloat(prevState.subtotal) - parseFloat(product.subtotal) + parseFloat(newSelectedProducts[index].subtotal),
     }));
     updateTotal();
     setSelectedProducts(newSelectedProducts);
@@ -144,13 +145,13 @@ function CreateOrder() {
   const handleSubmit = async (ev) => {
     ev.preventDefault();
     const orderProductsList = selectedProducts.map((e, i) => ({
-      unit_price: selectedProducts[i].price,
-      quantity: e.quantity,
-      total: selectedProducts[i].price * e.quantity,
+      unit_price: parseFloat(selectedProducts[i].price),
+      quantity: parseInt(e.quantity, 10),
+      total: parseFloat(selectedProducts[i].price) * parseFloat(e.quantity),
       productId: selectedProducts[i].id,
     }));
     await OrdersService.createOrder(orderData, orderProductsList).then((res) => {
-      triggerToast('success', 'Produto cadastrado com sucesso');
+      triggerToast('success', 'Venda cadastrado com sucesso');
       return res;
     })
       .then((res) => {

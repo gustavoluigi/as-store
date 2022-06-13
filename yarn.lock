@@ -8518,6 +8518,11 @@ react-error-overlay@^6.0.11:
   resolved "https://registry.npmjs.org/react-error-overlay/-/react-error-overlay-6.0.11.tgz"
   integrity sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg==
 
+react-functional-select@^3.3.3:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/react-functional-select/-/react-functional-select-3.3.3.tgz#276959658702167b8132b94b3c708c72dc843ed6"
+  integrity sha512-OLYfZe4setjvuNR35V8KXK/iCbEh1PTxZIrPKcqmFKnwoKqLDEz1reoJmpm0mjw+UycYwe149FrfsWkI9NfQfg==
+
 react-icons@^4.4.0:
   version "4.4.0"
   resolved "https://registry.npmjs.org/react-icons/-/react-icons-4.4.0.tgz"

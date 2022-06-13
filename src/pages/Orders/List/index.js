@@ -12,13 +12,14 @@ import { formatDate } from '../../../utils';
 function Orders() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState();
-  const tableHeads = ['ID', 'Data', 'Qt. Produtos', 'Subtotal', 'Desconto', 'Total', 'Obs', 'Pagamento', 'Cliente'];
+  const tableHeads = ['ID', 'Cliente', 'Data', 'Qt. Produtos', 'Subtotal', 'Desconto', 'Total', 'Obs', 'Pagamento'];
 
   const loadOrders = async () => {
     const ordersList = await OrdersService.listOrdersWithCustomer();
 
     const filteredOrdersList = ordersList.map((i) => ({
       id: i.id,
+      name: i.customer.name,
       date: formatDate(i.date),
       qt_products: i.qt_products,
       subtotal: i.subtotal,
@@ -26,7 +27,6 @@ function Orders() {
       total: i.total,
       obs: i.obs,
       transaction: i.transaction,
-      name: i.customer.name,
     }));
     setOrders(filteredOrdersList);
   };

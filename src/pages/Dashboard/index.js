@@ -14,12 +14,12 @@ import PageTitle from '../../components/PageTitle';
 import Private from '../../layout/Private';
 import GoalsService from '../../services/GoalsService';
 import { formatPrice } from '../../utils';
-import { ChartBox } from './styles';
+import { Block, BlockWrapper, ChartBox } from './styles';
 
 function Dashboard() {
   const [chartDataMeta, setChartDataMeta] = useState([
     { name: 'Meta', value: 0 },
-    { name: 'Total ', value: 100000 },
+    { name: 'Total ', value: 0 },
   ]);
   const [ordersCount, setOrdersCount] = useState();
 
@@ -43,30 +43,34 @@ function Dashboard() {
   return (
     <Private>
       <PageTitle>Dashboard</PageTitle>
-      <Wrapper>
-        <p>Meta do mês: {formatPrice(chartDataMeta[0].value)}</p>
-        <p>Total de vendas até o momento: {ordersCount}</p>
-        <p>Valor total de vendas até o momento: {formatPrice(chartDataMeta[1].value)}</p>
-        {/* <ChartBox style={{ height: 500 }}> */}
+      <BlockWrapper>
+        <Block>
+          <h1>{formatPrice(chartDataMeta[0].value)}</h1>
+          <p>Meta do mês</p>
+        </Block>
+        <Block>
+          <h2>{ordersCount}</h2>
+          <p>Total de vendas até o momento</p>
+        </Block>
+        <Block>
+          <h2>{formatPrice(chartDataMeta[1].value)}</h2>
+          <p>Valor total de vendas até o momento</p>
+        </Block>
+      </BlockWrapper>
+      {/* <Wrapper>
         <ChartBox>
           <ResponsiveContainer>
             <PieChart>
-              <Pie
-                data={chartDataMeta}
-                innerRadius={30}
-                fill="#8884d8"
-                dataKey="value"
-              >
+              <Pie data={chartDataMeta} innerRadius={30} fill="#8884d8" dataKey="value">
                 {chartDataMeta.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS_META[index % COLORS_META.length]} />
                 ))}
               </Pie>
               <Tooltip content={CustomTooltip} />
-
             </PieChart>
           </ResponsiveContainer>
         </ChartBox>
-      </Wrapper>
+      </Wrapper> */}
     </Private>
   );
 }
