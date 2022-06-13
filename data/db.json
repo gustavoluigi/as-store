@@ -3,23 +3,41 @@
     {
       "id": 1,
       "name": "Gustavo Luigi",
-      "phone": "13991589497",
+      "phone": "(13) 99158-9497",
       "address": "Rua Nabuco de Araújo, 491, apto 95",
-      "zipcode": "11025011"
+      "zipcode": "11025-011",
+      "birthday": "1994-08-29",
+      "cpf": "437.344.598-26",
+      "shoes": "40",
+      "top": "M",
+      "bottom": "G/40",
+      "desc": "Descrição do cliente"
     },
     {
       "id": 2,
       "name": "Victor Henrique",
-      "phone": "1399999999",
+      "phone": "(13) 99158-9497",
       "address": "Rua Lorem Ipsum",
-      "zipcode": "11025011"
+      "zipcode": "11025011",
+      "birthday": "1994-08-29",
+      "cpf": "43734459826",
+      "shoes": "40",
+      "top": "M",
+      "bottom": "G/40",
+      "desc": "Descrição do cliente"
     },
     {
       "name": "Victoria Flores",
       "phone": "19997816799",
       "address": "Rua Nabuco de Araújo, 491, ap 95",
       "zipcode": "11025011",
-      "id": 3
+      "id": 3,
+      "birthday": "1994-08-29",
+      "cpf": "43734459826",
+      "shoes": "40",
+      "top": "M",
+      "bottom": "G/40",
+      "desc": "Descrição do cliente"
     }
   ],
   "products": [
@@ -160,15 +178,23 @@
     },
     {
       "id": 2,
-      "type": "Dinheiro"
+      "type": "Cartão de débito"
     },
     {
       "id": 3,
-      "type": "Cheque"
+      "type": "Dinheiro"
     },
     {
       "id": 4,
+      "type": "Cheque"
+    },
+    {
+      "id": 5,
       "type": "Transferência"
+    },
+    {
+      "id": 6,
+      "type": "PIX"
     }
   ],
   "goals": [
