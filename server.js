@@ -13,6 +13,11 @@ server.use(
     '/api/*': '/$1',
   }),
 );
+server.use(
+  jsonServer.rewriter({
+    '/*': '/$1',
+  }),
+);
 
 server.use(router);
 server.listen(PORT, () => {
