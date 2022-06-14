@@ -13,6 +13,7 @@
     "axios": "^0.27.2",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
+    "concurrently": "^7.2.1",
     "json-server": "^0.17.0",
     "process": "^0.11.10",
     "prop-types": "^15.8.1",
@@ -33,6 +34,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
+    "dev": "concurrently --kill-others \"react-app-rewired start\" \"npx json-server --watch data/db.json --routes data/routes.json --port 3001\"",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
