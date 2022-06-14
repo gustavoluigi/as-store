@@ -1,4 +1,6 @@
+/* eslint-disable max-len */
 /* eslint-disable no-param-reassign */
+import ProductsService from './ProductsService';
 import HttpClient from './utils/HttpClient';
 
 class OrdersService {
@@ -80,16 +82,12 @@ class OrdersService {
 
   async createOrder(order, products) {
     const { data: response } = await HttpClient.post('/orders', order).then((res) => res);
-
     const orderProducts = products.map((e) => ({ orderId: response.id, ...e }));
-
     orderProducts.map(async (e) => {
       await HttpClient.post('/order_products', e).then(async (res) => {
-        const qt = await HttpClient.get(`/products/${res.data.productId}`);
-        await HttpClient.patch(`/products/${e.productId}`, { storage: qt.data.storage - res.data.quantity });
+        await ProductsService.decreaseProductQt(res.data.productId, res.data.quantity);
       });
     });
-
     return response;
   }
 

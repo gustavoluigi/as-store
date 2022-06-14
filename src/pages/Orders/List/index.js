@@ -12,15 +12,15 @@ import { formatDate } from '../../../utils';
 function Orders() {
   const navigate = useNavigate();
   const [orders, setOrders] = useState();
-  const tableHeads = ['ID', 'Cliente', 'Data', 'Qt. Produtos', 'Subtotal', 'Desconto', 'Total', 'Obs', 'Pagamento'];
+  const tableHeads = ['ID', 'Data', 'Cliente', 'Qt. Produtos', 'Subtotal', 'Desconto', 'Total', 'Obs', 'Pagamento'];
 
   const loadOrders = async () => {
     const ordersList = await OrdersService.listOrdersWithCustomer();
 
     const filteredOrdersList = ordersList.map((i) => ({
       id: i.id,
-      name: i.customer.name,
       date: formatDate(i.date),
+      name: i.customer.name,
       qt_products: i.qt_products,
       subtotal: i.subtotal,
       discount: i.discount,

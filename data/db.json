@@ -61,7 +61,7 @@
       "color": "Preta",
       "size": "M",
       "brand": "Cris Barros",
-      "storage": 14,
+      "storage": 10,
       "ref": "123-CB",
       "sku": "SKUCAMISETA"
     },
@@ -84,7 +84,7 @@
       "color": "Branca",
       "size": "36",
       "brand": "NK",
-      "storage": 17,
+      "storage": 10,
       "ref": "123-NK",
       "sku": "LZM545424",
       "id": 4
@@ -112,6 +112,39 @@
       "transaction": "Dinheiro",
       "customerId": 3,
       "id": 2
+    },
+    {
+      "date": "2022-06-14",
+      "qt_products": 2,
+      "subtotal": 2467.1,
+      "discount": 10,
+      "total": 2220.39,
+      "obs": null,
+      "transaction": "Cartão de crédito",
+      "customerId": 1,
+      "id": 3
+    },
+    {
+      "date": "2022-06-14",
+      "qt_products": 2,
+      "subtotal": 2467.1,
+      "discount": 5,
+      "total": 2343.745,
+      "obs": null,
+      "transaction": "Cartão de débito",
+      "customerId": 1,
+      "id": 4
+    },
+    {
+      "date": "2022-06-14",
+      "qt_products": 6,
+      "subtotal": 6217.75,
+      "discount": 5,
+      "total": 5906.8625,
+      "obs": null,
+      "transaction": "PIX",
+      "customerId": 2,
+      "id": 5
     }
   ],
   "order_products": [
@@ -146,6 +179,38 @@
       "total": 100,
       "productId": 1,
       "id": 4
+    },
+    {
+      "orderId": 3,
+      "unit_price": 1233.55,
+      "quantity": 2,
+      "total": 2467.1,
+      "productId": 4,
+      "id": 5
+    },
+    {
+      "orderId": 4,
+      "unit_price": 1233.55,
+      "quantity": 2,
+      "total": 2467.1,
+      "productId": 4,
+      "id": 6
+    },
+    {
+      "orderId": 5,
+      "unit_price": 50,
+      "quantity": 1,
+      "total": 50,
+      "productId": 2,
+      "id": 7
+    },
+    {
+      "orderId": 5,
+      "unit_price": 1233.55,
+      "quantity": 5,
+      "total": 6167.75,
+      "productId": 4,
+      "id": 8
     }
   ],
   "transactions": [
@@ -192,6 +257,22 @@
       "month": "07",
       "year": "2022",
       "id": 3
+    }
+  ],
+  "delivery": [
+    {
+      "id": 1,
+      "dateInit": "2022-06-12",
+      "dateEnd": "2022-06-15",
+      "qtProducts": 5
+    }
+  ],
+  "delivery_products": [
+    {
+      "id": 1,
+      "deliveryId": 1,
+      "quantity": 5,
+      "productId": 1
     }
   ]
 }
