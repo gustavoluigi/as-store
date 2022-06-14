@@ -259,12 +259,13 @@
       "id": 3
     }
   ],
-  "delivery": [
+  "deliveries": [
     {
       "id": 1,
       "dateInit": "2022-06-12",
       "dateEnd": "2022-06-15",
-      "qtProducts": 5
+      "qtProducts": 5,
+      "customerId": 1
     }
   ],
   "delivery_products": [

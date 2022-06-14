@@ -1,10 +1,11 @@
 import { Outlet, useRoutes } from 'react-router-dom';
-import DeliveryList from './components/Delivery/List';
 import Login from './pages/Auth/Login';
 import CreateCustomer from './pages/Customers/Create';
 import Customers from './pages/Customers/List';
 import ShowCustomer from './pages/Customers/Show';
 import Dashboard from './pages/Dashboard';
+import CreateDelivery from './pages/Delivery/Create';
+import Deliveries from './pages/Delivery/List';
 import CreateGoal from './pages/Goals/Create/index';
 import Goals from './pages/Goals/List';
 import CreateOrder from './pages/Orders/Create';
@@ -85,7 +86,11 @@ export default function Router() {
     },
     {
       path: 'delivery',
-      element: <DeliveryList />,
+      element: <Deliveries />,
+    },
+    {
+      path: 'delivery/criar',
+      element: <CreateDelivery />,
     },
   ]);
 }

@@ -53,8 +53,7 @@ class ProductsService {
   }
 
   async updateProductQt(productId, newQt) {
-    const product = await HttpClient.get(`/products/${productId}`).then((res) => res);
-    const response = await HttpClient.patch(`/products/${productId}`, { storage: product.storage - newQt });
+    const response = await HttpClient.patch(`/products/${productId}`, { storage: newQt });
     return response;
   }
 }
