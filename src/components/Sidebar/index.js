@@ -1,7 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Link, NavLink } from 'react-router-dom';
+import { useState } from 'react';
 import {
   Container,
+  HiMenuAlt1Styled,
   HiOutlineAdjustmentsStyled,
   HiOutlineDocumentTextStyled,
   HiOutlinePresentationChartLineStyled,
@@ -12,56 +14,75 @@ import {
   Img,
   Item,
   List,
+  MobileNav,
 } from './styles';
 import asLogo from '../../assets/images/as-logo.png';
+import useMedia from '../../hooks/useMedia';
 
 function Sidebar() {
+  const isMobile = useMedia(['(max-width: 768px)'], [true]);
+  const [isActiveNavMobile, setIsActiveNavMobile] = useState(false);
+
+  const onClickNavMobile = () => {
+    setIsActiveNavMobile(!isActiveNavMobile);
+  };
+
   return (
     <Container>
       <Img src={asLogo} alt="Adriana Sotto" />
       <List className="">
-        <Item className="group">
-          <NavLink to="/dashboard" href="#">
-            <HiOutlineAdjustmentsStyled />
-            <span>Dashboard</span>
-          </NavLink>
-        </Item>
-        <Item className="group">
-          <NavLink to="/vendas" href="#">
-            <HiOutlineShoppingCartStyled />
-            <span>Vendas</span>
-          </NavLink>
-        </Item>
-        <Item className="group">
-          <NavLink to="/clientes" href="#">
-            <HiOutlineUserGroupStyled />
-            <span>Clientes</span>
-          </NavLink>
-        </Item>
-        <Item className="group">
-          <NavLink to="/produtos" href="#">
-            <HiOutlineShoppingBagStyled />
-            <span>Produtos</span>
-          </NavLink>
-        </Item>
-        <Item className="group">
-          <NavLink to="/relatorios" href="#">
-            <HiOutlineDocumentTextStyled />
-            <span>Relatórios</span>
-          </NavLink>
-        </Item>
-        <Item className="group">
-          <NavLink to="/metas" href="#">
-            <HiOutlinePresentationChartLineStyled />
-            <span>Metas</span>
-          </NavLink>
-        </Item>
-        <Item className="group">
-          <NavLink to="/delivery" href="#">
-            <HiShoppingBagStyled />
-            <span>Delivery</span>
-          </NavLink>
-        </Item>
+        {isMobile && (
+          <Item className="group">
+            <NavLink to="/dashboard" onClick={onClickNavMobile}>
+              <HiMenuAlt1Styled />
+              <span>Menu</span>
+            </NavLink>
+          </Item>
+        )}
+        <MobileNav show={isActiveNavMobile} isMobile={isMobile}>
+          <Item className="group">
+            <NavLink to="/dashboard">
+              <HiOutlineAdjustmentsStyled />
+              <span>Dashboard</span>
+            </NavLink>
+          </Item>
+          <Item className="group">
+            <NavLink to="/vendas">
+              <HiOutlineShoppingCartStyled />
+              <span>Vendas</span>
+            </NavLink>
+          </Item>
+          <Item className="group">
+            <NavLink to="/clientes">
+              <HiOutlineUserGroupStyled />
+              <span>Clientes</span>
+            </NavLink>
+          </Item>
+          <Item className="group">
+            <NavLink to="/produtos">
+              <HiOutlineShoppingBagStyled />
+              <span>Produtos</span>
+            </NavLink>
+          </Item>
+          <Item className="group">
+            <NavLink to="/relatorios">
+              <HiOutlineDocumentTextStyled />
+              <span>Relatórios</span>
+            </NavLink>
+          </Item>
+          <Item className="group">
+            <NavLink to="/metas">
+              <HiOutlinePresentationChartLineStyled />
+              <span>Metas</span>
+            </NavLink>
+          </Item>
+          <Item className="group">
+            <NavLink to="/delivery">
+              <HiShoppingBagStyled />
+              <span>Delivery</span>
+            </NavLink>
+          </Item>
+        </MobileNav>
       </List>
     </Container>
   );
