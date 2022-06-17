@@ -6,7 +6,6 @@ import tw from 'twin.macro';
 import Input from '../../components/Form/Input';
 import { Wrapper } from '../../components/Layout/Wrapper';
 import PageTitle from '../../components/PageTitle';
-import Private from '../../layout/Private';
 
 const Button = styled.button`
   ${tw`relative transition inline-flex w-full mt-3 mb-5 ml-auto justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500`}
@@ -15,7 +14,7 @@ const Button = styled.button`
 function Reports() {
   const [date, setDate] = useState();
   return (
-    <Private>
+    <>
       <PageTitle>Relatórios</PageTitle>
       <Wrapper>
         <Input
@@ -32,7 +31,7 @@ function Reports() {
           </Link>
         )}
       </Wrapper>
-    </Private>
+    </>
   );
 }
 

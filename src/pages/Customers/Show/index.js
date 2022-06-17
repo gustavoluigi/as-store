@@ -5,13 +5,12 @@ import Input from '../../../components/Form/Input';
 import Textarea from '../../../components/Form/Textarea';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
-
-import Private from '../../../layout/Private';
 import CustomersService from '../../../services/CustomersService';
 import { triggerToast, Toast } from '../../../utils/triggerToast';
 import { Button, ButtonFloat, EditIcon } from './styles';
 import { formatPhone, formatCep } from '../../../utils';
 import { formatCpf } from '../../../utils/formatCpf';
+import BackButton from '../../../components/BackButton';
 
 function ShowCustomer() {
   const navigate = useNavigate();
@@ -52,7 +51,7 @@ function ShowCustomer() {
       .then(triggerToast('error', 'Cliente deletado'))
       .finally(() => {
         setTimeout(() => {
-          navigate('/clientes', { replace: true });
+          navigate('/clientes');
         }, 2000);
       });
   };
@@ -62,8 +61,9 @@ function ShowCustomer() {
   }, []);
 
   return (
-    <Private>
+    <>
       <Toast />
+      <BackButton />
       <ButtonFloat danger onClick={handleDelete}>
         <EditIcon />
         Deletar cliente
@@ -171,7 +171,7 @@ function ShowCustomer() {
           {enableEdit && <Button type="submit">Salvar</Button>}
         </form>
       </Wrapper>
-    </Private>
+    </>
   );
 }
 

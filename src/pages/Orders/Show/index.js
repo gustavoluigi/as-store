@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import BackButton from '../../../components/BackButton';
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
-import Private from '../../../layout/Private';
 import OrdersService from '../../../services/OrdersService';
 import { formatPrice } from '../../../utils';
 import { Details } from './styles';
@@ -34,7 +33,7 @@ function Order() {
     getOrder();
   }, []);
   return (
-    <Private>
+    <>
       <BackButton />
       <PageTitle>Venda número {id}</PageTitle>
       {order && (
@@ -74,7 +73,7 @@ function Order() {
         </Details>
       )}
       <Table tableHeads={tableHeads} tableRows={products} />
-    </Private>
+    </>
   );
 }
 

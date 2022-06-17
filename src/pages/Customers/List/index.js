@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
-import Private from '../../../layout/Private';
 import CustomersService from '../../../services/CustomersService';
 import { formatPhone } from '../../../utils';
 import { AddIcon, Button } from './styles';
@@ -22,11 +21,11 @@ function Customers() {
   };
 
   const handleTableClick = (customerId) => {
-    navigate(`../clientes/${customerId}`, { replace: true });
+    navigate(`../${customerId}`);
   };
 
   const handleAddClick = () => {
-    navigate('../clientes/criar', { replace: true });
+    navigate('../criar');
   };
 
   useEffect(() => {
@@ -34,7 +33,7 @@ function Customers() {
   }, []);
 
   return (
-    <Private>
+    <>
       <Button onClick={handleAddClick}>
         <AddIcon />
         Novo cliente
@@ -48,7 +47,7 @@ function Customers() {
           handleClick={handleTableClick}
         />
       </Wrapper>
-    </Private>
+    </>
   );
 }
 

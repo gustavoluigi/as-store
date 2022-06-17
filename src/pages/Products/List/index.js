@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
-import Private from '../../../layout/Private';
 import ProductsService from '../../../services/ProductsService';
 import { AddIcon, Button } from './styles';
 
@@ -19,18 +18,18 @@ function Products() {
   };
 
   const handleTableClick = (productId) => {
-    navigate(`../produtos/${productId}`, { replace: true });
+    navigate(`../${productId}`);
   };
 
   const handleAddClick = () => {
-    navigate('../produtos/criar', { replace: true });
+    navigate('../criar');
   };
 
   useEffect(() => {
     getProducts();
   }, []);
   return (
-    <Private>
+    <>
       <Button onClick={handleAddClick}>
         <AddIcon />
         Novo produto
@@ -44,7 +43,7 @@ function Products() {
           handleClick={handleTableClick}
         />
       </Wrapper>
-    </Private>
+    </>
   );
 }
 

@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
-import Private from '../../../layout/Private';
 import { AddIcon, Button } from './styles';
 import OrdersService from '../../../services/OrdersService';
 import { formatDate } from '../../../utils';
@@ -32,18 +31,18 @@ function Orders() {
   };
 
   const handleTableClick = (orderId) => {
-    navigate(`../vendas/${orderId}`, { replace: true });
+    navigate(`../${orderId}`);
   };
 
   const handleAddClick = () => {
-    navigate('../vendas/criar', { replace: true });
+    navigate('../criar');
   };
 
   useEffect(() => {
     loadOrders();
   }, []);
   return (
-    <Private>
+    <>
       <Button onClick={handleAddClick}>
         <AddIcon />
         Nova venda
@@ -52,7 +51,7 @@ function Orders() {
       <Wrapper>
         <Table tableHeads={tableHeads} tableRows={orders} hasSearch handleClick={handleTableClick} />
       </Wrapper>
-    </Private>
+    </>
   );
 }
 

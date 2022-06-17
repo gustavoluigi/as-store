@@ -34,7 +34,7 @@ function Goals() {
   }, []);
 
   const handleAddClick = () => {
-    navigate('../metas/criar', { replace: true });
+    navigate('../metas/criar');
   };
   return (
     <Private>

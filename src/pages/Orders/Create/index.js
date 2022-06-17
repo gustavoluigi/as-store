@@ -156,7 +156,7 @@ function CreateOrder() {
     })
       .then((res) => {
         setTimeout(() => {
-          navigate(`/vendas/${res.id}`, { replace: true });
+          navigate(`/vendas/${res.id}`);
         }, 2000);
       });
   };
@@ -168,7 +168,7 @@ function CreateOrder() {
   }, []);
 
   return (
-    <Private>
+    <>
       <Modal isOpen={openModal} onClickClose={() => setOpenModal(false)}>
         <h2 className="mt-10 mb-4">Busque e selecione os produtos desejados</h2>
         <Table tableHeads={tableHeads} tableRows={products} hasSearch hasSelection handleSelect={handleSelectProduct} />
@@ -274,7 +274,7 @@ function CreateOrder() {
         </form>
         <Button onClick={handleOpenSummaryModal}>Finalizar pedido</Button>
       </Wrapper>
-    </Private>
+    </>
   );
 }
 

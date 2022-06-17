@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { HiArrowSmLeft } from 'react-icons/hi';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -11,14 +12,14 @@ export const BackIcon = styled(HiArrowSmLeft)`
   ${tw`h-5 w-5 text-white mr-4`}
 `;
 
-function BackButton() {
+function BackButton(props) {
   const navigate = useNavigate();
   const handleBack = () => {
-    navigate(-1, { replace: true });
+    navigate(-1);
   };
 
   return (
-    <Button onClick={handleBack}>
+    <Button {...props} onClick={handleBack}>
       <BackIcon />
       Voltar
     </Button>

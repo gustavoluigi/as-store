@@ -5,8 +5,8 @@ import Input from '../../../components/Form/Input';
 import Textarea from '../../../components/Form/Textarea';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
-import Private from '../../../layout/Private';
 import ProductsService from '../../../services/ProductsService';
+import { formatPrice, unformatPrice } from '../../../utils';
 import { Toast, triggerToast } from '../../../utils/triggerToast';
 import { Button } from './styles';
 
@@ -14,7 +14,7 @@ function CreateProduct() {
   const navigate = useNavigate();
   const [product, setProduct] = useState({
     name: null,
-    price: null,
+    price: 'R$ 123,22',
     desc: null,
     color: null,
     size: null,
@@ -25,19 +25,20 @@ function CreateProduct() {
   });
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await ProductsService.createProduct(product)
-      .then((res) => {
-        triggerToast('success', 'Produto cadastrado com sucesso');
-        return res;
-      })
-      .then((res) => {
-        setTimeout(() => {
-          navigate(`/produtos/${res.id}`, { replace: true });
-        }, 2000);
-      });
+    // await ProductsService.createProduct(product)
+    //   .then((res) => {
+    //     triggerToast('success', 'Produto cadastrado com sucesso');
+    //     return res;
+    //   })
+    //   .then((res) => {
+    //     setTimeout(() => {
+    //       navigate(`/produtos/${res.id}`);
+    //     }, 2000);
+    //   });
+    console.log(product);
   };
   return (
-    <Private>
+    <>
       <Toast />
       <PageTitle>Novo produto</PageTitle>
       <Wrapper>
@@ -94,7 +95,7 @@ function CreateProduct() {
             label="Quantidade em estoque"
             id="storage"
             name="storage"
-            type="text"
+            type="number"
             value={product.storage ? product.storage : ''}
             onChange={(event) => setProduct((prevState) => ({ ...prevState, storage: event.target.value }))}
           />
@@ -119,7 +120,7 @@ function CreateProduct() {
           </Button>
         </form>
       </Wrapper>
-    </Private>
+    </>
   );
 }
 

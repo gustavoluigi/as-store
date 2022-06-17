@@ -6,7 +6,6 @@ import Textarea from '../../../components/Form/Textarea';
 import Select from '../../../components/Form/Select';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
-import Private from '../../../layout/Private';
 import ProductsService from '../../../services/ProductsService';
 import { ButtonFloat, EditIcon } from '../../Customers/Show/styles';
 import { Toast, triggerToast } from '../../../utils/triggerToast';
@@ -49,7 +48,7 @@ function Product() {
       .then(triggerToast('error', 'Produto deletado'))
       .finally(() => {
         setTimeout(() => {
-          navigate('/produtos', { replace: true });
+          navigate('/produtos');
         }, 2000);
       });
   };
@@ -59,8 +58,7 @@ function Product() {
   }, []);
 
   return (
-
-    <Private>
+    <>
       <Toast />
       <ButtonFloat danger onClick={handleDelete}>
         <EditIcon />
@@ -131,7 +129,7 @@ function Product() {
             label="Quantidade em estoque"
             id="storage"
             name="storage"
-            type="text"
+            type="number"
             readOnly={!enableEdit}
             value={product.storage}
             onChange={(event) => setProduct((prevState) => ({ ...prevState, storage: parseInt(event.target.value, 10) }))}
@@ -158,7 +156,7 @@ function Product() {
         </form>
       </Wrapper>
 
-    </Private>
+    </>
 
   );
 }

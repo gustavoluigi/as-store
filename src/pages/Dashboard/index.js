@@ -11,7 +11,6 @@ import {
 import CustomTooltip from '../../components/Charts/CustomTooltip';
 import { Wrapper } from '../../components/Layout/Wrapper';
 import PageTitle from '../../components/PageTitle';
-import Private from '../../layout/Private';
 import GoalsService from '../../services/GoalsService';
 import { formatPrice } from '../../utils';
 import { Block, BlockWrapper, ChartBox } from './styles';
@@ -41,7 +40,7 @@ function Dashboard() {
   }, []);
   const COLORS_META = ['#0088FE', '#00C49F'];
   return (
-    <Private>
+    <>
       <PageTitle>Dashboard</PageTitle>
       <BlockWrapper>
         <Block>
@@ -71,7 +70,7 @@ function Dashboard() {
           </ResponsiveContainer>
         </ChartBox>
       </Wrapper> */}
-    </Private>
+    </>
   );
 }
 

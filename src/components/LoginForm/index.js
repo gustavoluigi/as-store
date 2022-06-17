@@ -31,7 +31,7 @@ function LoginForm() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    navigate('../dashboard', { replace: true });
+    navigate('../dashboard');
     console.log(email, password);
   }
   return (

@@ -1,11 +1,12 @@
-import { Outlet, useRoutes } from 'react-router-dom';
+import { useRoutes } from 'react-router-dom';
+import Private from './layout/Private';
 import Login from './pages/Auth/Login';
 import CreateCustomer from './pages/Customers/Create';
 import Customers from './pages/Customers/List';
 import ShowCustomer from './pages/Customers/Show';
 import Dashboard from './pages/Dashboard';
-import CreateDelivery from './pages/Delivery/Create';
-import Deliveries from './pages/Delivery/List';
+import CreateDelivery from './pages/Deliveries/Create';
+import Deliveries from './pages/Deliveries/List';
 import CreateGoal from './pages/Goals/Create/index';
 import Goals from './pages/Goals/List';
 import CreateOrder from './pages/Orders/Create';
@@ -26,51 +27,86 @@ export default function Router() {
     },
     {
       path: 'dashboard',
-      element: <Dashboard />,
+      element: <Private />,
+      children: [
+        {
+          path: '',
+          element: <Dashboard />,
+        },
+      ],
     },
     {
       path: 'vendas',
-      element: <Orders />,
-    },
-    {
-      path: 'vendas/:id',
-      element: <Order />,
-    },
-    {
-      path: 'vendas/criar',
-      element: <CreateOrder />,
-    },
-    {
-      path: 'vendas/:id/editar',
-      element: <EditOrder />,
+      element: <Private />,
+      children: [
+        {
+          index: true,
+          path: '',
+          element: <Orders />,
+        },
+        {
+          path: 'criar',
+          element: <CreateOrder />,
+        },
+        {
+          path: ':id',
+          element: <Order />,
+        },
+        {
+          path: ':id/editar',
+          element: <EditOrder />,
+        },
+      ],
     },
     {
       path: 'produtos',
-      element: <Products />,
+      element: <Private />,
+      children: [
+        {
+          index: true,
+          path: '',
+          element: <Products />,
+        },
+        {
+          path: 'criar',
+          element: <CreateProduct />,
+        },
+        {
+          path: ':id',
+          element: <Product />,
+        },
+      ],
     },
-    {
-      path: 'produtos/criar',
-      element: <CreateProduct />,
-    },
-    {
-      path: 'produtos/:id',
-      element: <Product />,
-    },
+
     {
       path: 'clientes',
-      element: <Customers />,
+      element: <Private />,
+      children: [
+        {
+          index: true,
+          path: '',
+          element: <Customers />,
+        },
+        {
+          path: 'criar',
+          element: <CreateCustomer />,
+        },
+        {
+          path: ':id',
+          element: <ShowCustomer />,
+        },
+      ],
     },
-    {
-      path: 'clientes/criar',
-      element: <CreateCustomer />,
-    },
-    {
-      path: 'clientes/:id',
-      element: <ShowCustomer />,
-    },
+
     {
       path: 'relatorios',
-      element: <Reports />,
+      element: <Private />,
+      children: [
+        {
+          path: '',
+          element: <Reports />,
+        },
+      ],
     },
     {
       path: 'relatorio-mensal/:month/:year',

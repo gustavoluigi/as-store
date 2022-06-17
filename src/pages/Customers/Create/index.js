@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import Input from '../../../components/Form/Input';
 import Textarea from '../../../components/Form/Textarea';
 import PageTitle from '../../../components/PageTitle';
-
-import Private from '../../../layout/Private';
 import CustomersService from '../../../services/CustomersService';
 import { formatCep, formatPhone } from '../../../utils';
 import { formatCpf } from '../../../utils/formatCpf';
@@ -30,13 +28,13 @@ function CreateCustomer() {
       })
       .then((res) => {
         setTimeout(() => {
-          navigate(`/clientes/${res.id}`, { replace: true });
+          navigate(`/clientes/${res.id}`);
         }, 2000);
       });
   };
 
   return (
-    <Private>
+    <>
       <Toast />
       <PageTitle>Novo cliente</PageTitle>
       <Wrapper>
@@ -129,7 +127,7 @@ function CreateCustomer() {
           </Button>
         </form>
       </Wrapper>
-    </Private>
+    </>
   );
 }
 
