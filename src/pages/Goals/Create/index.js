@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import Input from '../../../components/Form/Input';
 import { Wrapper } from '../../../components/Layout/Wrapper';
-
 import PageTitle from '../../../components/PageTitle';
-
-import Private from '../../../layout/Private/index';
 import GoalsService from '../../../services/GoalsService';
 import { triggerToast, Toast } from '../../../utils';
 import { Button } from './styles';
@@ -27,7 +24,7 @@ function CreateGoal() {
       .catch((err) => triggerToast('error', err.msg));
   };
   return (
-    <Private>
+    <>
       <Toast />
       <PageTitle>Nova meta</PageTitle>
       <Wrapper>
@@ -59,7 +56,7 @@ function CreateGoal() {
           Criar meta
         </Button>
       </Wrapper>
-    </Private>
+    </>
   );
 }
 

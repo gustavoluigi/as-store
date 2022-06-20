@@ -5,7 +5,6 @@ import { capitilize, formatPrice } from '../../../utils';
 import GoalsService from '../../../services/GoalsService';
 import Table from '../../../components/Table';
 import PageTitle from '../../../components/PageTitle';
-import Private from '../../../layout/Private';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import { AddIcon, Button } from './styles';
 
@@ -34,10 +33,10 @@ function Goals() {
   }, []);
 
   const handleAddClick = () => {
-    navigate('../metas/criar');
+    navigate('../criar');
   };
   return (
-    <Private>
+    <>
       <Button onClick={handleAddClick}>
         <AddIcon />
         Nova meta
@@ -46,7 +45,7 @@ function Goals() {
       <Wrapper>
         <Table tableRows={goals} tableHeads={tableHeads} hasSearch searchField="date" />
       </Wrapper>
-    </Private>
+    </>
   );
 }
 

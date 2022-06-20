@@ -114,19 +114,34 @@ export default function Router() {
     },
     {
       path: 'metas',
-      element: <Goals />,
+      element: <Private />,
+      children: [
+        {
+          index: true,
+          path: '',
+          element: <Goals />,
+        },
+        {
+          path: 'criar',
+          element: <CreateGoal />,
+        },
+      ],
     },
-    {
-      path: 'metas/criar',
-      element: <CreateGoal />,
-    },
+
     {
       path: 'delivery',
-      element: <Deliveries />,
-    },
-    {
-      path: 'delivery/criar',
-      element: <CreateDelivery />,
+      element: <Private />,
+      children: [
+        {
+          index: true,
+          path: '',
+          element: <Deliveries />,
+        },
+        {
+          path: 'criar',
+          element: <CreateDelivery />,
+        },
+      ],
     },
   ]);
 }

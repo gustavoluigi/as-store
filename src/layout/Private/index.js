@@ -5,17 +5,13 @@ import { Container, Wrapper } from './styles';
 
 function Private() {
   return (
-    <Container>
+    <Container role="contentinfo">
       <Sidebar />
       <Wrapper>
-        <Outlet>{/* {children} */}</Outlet>
+        <Outlet />
       </Wrapper>
     </Container>
   );
 }
 
 export default Private;
-
-// Private.propTypes = {
-//   children: PropTypes.node.isRequired,
-// };
