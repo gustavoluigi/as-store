@@ -49,6 +49,11 @@ class OrdersService {
     return response;
   }
 
+  async listOrdersFromCustomer(customerId) {
+    const { data: response } = await HttpClient.get(`/orders?customerId=${customerId}`).then((res) => res);
+    return response;
+  }
+
   async getOrder(orderId) {
     const { data: response } = await HttpClient.get(`/orders/${orderId}`).then((res) => res);
     return response;

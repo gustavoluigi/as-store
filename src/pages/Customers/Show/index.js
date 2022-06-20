@@ -8,12 +8,16 @@ import PageTitle from '../../../components/PageTitle';
 import CustomersService from '../../../services/CustomersService';
 import { triggerToast, Toast } from '../../../utils/triggerToast';
 import { Button, ButtonFloat, EditIcon } from './styles';
-import { formatPhone, formatCep } from '../../../utils';
-import { formatCpf } from '../../../utils/formatCpf';
+import { formatPhone, formatCep, formatCpf } from '../../../utils';
 import BackButton from '../../../components/BackButton';
+import Table from '../../../components/Table/index';
+import OrdersService from '../../../services/OrdersService';
+import { formatDate } from '../../../utils/formatDate';
 
 function ShowCustomer() {
+  const tableHeads = ['ID', 'Data', 'Qt. Produtos', 'Subtotal', 'Desconto', 'Total', 'Obs', 'Pagamento'];
   const navigate = useNavigate();
+  const [orders, setOrders] = useState();
   const [enableEdit, setEnableEdit] = useState(false);
   const [customer, setCustomer] = useState({
     id: 0,
@@ -28,17 +32,35 @@ function ShowCustomer() {
     bottom: '',
     desc: '',
   });
-  const { id } = useParams();
+  const { id: customerId } = useParams();
 
   const getCustomer = async () => {
-    const customerDetails = await CustomersService.getCustomer(id);
+    const customerDetails = await CustomersService.getCustomer(customerId);
 
     setCustomer(customerDetails);
   };
 
+  const loadOrders = async () => {
+    const ordersList = await OrdersService.listOrdersFromCustomer(customerId);
+    ordersList.sort(
+      (a, b) => new Date(`${b.date}`) - new Date(`${a.date}`),
+    );
+    const filteredOrdersList = ordersList.map((i) => ({
+      id: i.id,
+      date: formatDate(i.date),
+      qt_products: i.qt_products,
+      subtotal: i.subtotal,
+      discount: i.discount,
+      total: i.total,
+      obs: i.obs,
+      transaction: i.transaction,
+    }));
+    setOrders(filteredOrdersList);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await CustomersService.editCustomer(id, customer).then(triggerToast('success', 'Cliente editado com sucesso'));
+    await CustomersService.editCustomer(customerId, customer).then(triggerToast('success', 'Cliente editado com sucesso'));
     setEnableEdit(false);
   };
 
@@ -47,7 +69,7 @@ function ShowCustomer() {
   };
 
   const handleDelete = async () => {
-    await CustomersService.deleteCustomer(id)
+    await CustomersService.deleteCustomer(customerId)
       .then(triggerToast('error', 'Cliente deletado'))
       .finally(() => {
         setTimeout(() => {
@@ -56,8 +78,13 @@ function ShowCustomer() {
       });
   };
 
+  const handleTableClick = (orderId) => {
+    navigate(`/vendas/${orderId}`);
+  };
+
   useEffect(() => {
     getCustomer();
+    loadOrders();
   }, []);
 
   return (
@@ -170,6 +197,8 @@ function ShowCustomer() {
           />
           {enableEdit && <Button type="submit">Salvar</Button>}
         </form>
+        <h3>Vendas</h3>
+        <Table tableHeads={tableHeads} tableRows={orders} handleClick={handleTableClick} />
       </Wrapper>
     </>
   );
