@@ -8,7 +8,6 @@ import PageTitle from '../../../components/PageTitle';
 import Select from '../../../components/Form/Select';
 import Table from '../../../components/Table';
 import Textarea from '../../../components/Form/Textarea';
-import Private from '../../../layout/Private';
 import {
   AddIcon, Button, Details, Wrapper,
 } from './styles';

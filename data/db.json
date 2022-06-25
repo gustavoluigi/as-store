@@ -265,7 +265,8 @@
       "dateInit": "2022-06-12",
       "dateEnd": "2022-06-15",
       "qtProducts": 5,
-      "customerId": 1
+      "customerId": 1,
+      "obs": "Observações da entrega"
     }
   ],
   "delivery_products": [

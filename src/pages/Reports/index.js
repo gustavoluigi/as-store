@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import Input from '../../components/Form/Input';
+import Select from '../../components/Form/Select';
 import { Wrapper } from '../../components/Layout/Wrapper';
 import PageTitle from '../../components/PageTitle';
 
@@ -12,11 +13,21 @@ const Button = styled.button`
 `;
 
 function Reports() {
+  const reportsOptions = [
+    {
+      key: 'relatorio-mensal',
+      value: 'relatorio-mensal',
+      label: 'Vendas por mês',
+    },
+  ];
+  const [reportType, setReportType] = useState();
   const [date, setDate] = useState();
   return (
     <>
       <PageTitle>Relatórios</PageTitle>
       <Wrapper>
+        <Select label="Tipo de relatório" options={reportsOptions} onChange={(e) => setReportType(e.target.value)} />
+        {reportType === 'relatorio-mensal' && (
         <Input
           label="Data"
           id="date"
@@ -25,8 +36,10 @@ function Reports() {
           value={date || ''}
           onChange={(e) => setDate(e.target.value)}
         />
+        )}
+
         {date && (
-          <Link to={`/relatorio-mensal/${date.split('-')[1]}/${date.split('-')[0]}`} target="_blank">
+          <Link to={`/${reportType}/${date.split('-')[1]}/${date.split('-')[0]}`} target="_blank">
             <Button type="button">Gerar ralatório</Button>
           </Link>
         )}

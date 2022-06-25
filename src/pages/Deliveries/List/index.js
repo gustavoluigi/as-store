@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Private from '../../../layout/Private';
 import PageTitle from '../../../components/PageTitle';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import DeliveriesService from '../../../services/DeliveriesService';
 import Table from '../../../components/Table';
 import { formatDate } from '../../../utils';
+import { AddIcon, Button } from './styles';
 
 function Deliveries() {
   const navigate = useNavigate();
@@ -27,19 +27,27 @@ function Deliveries() {
   };
 
   const handleTableClick = (deliveryId) => {
-    navigate(`../delivery/${deliveryId}`);
+    navigate(`../${deliveryId}`);
+  };
+
+  const handleAddClick = () => {
+    navigate('../criar');
   };
 
   useEffect(() => {
     getDeliveries();
   }, []);
   return (
-    <Private>
+    <>
+      <Button onClick={handleAddClick}>
+        <AddIcon />
+        Novo delivery
+      </Button>
       <PageTitle>Delivery</PageTitle>
       <Wrapper>
         <Table tableHeads={tableHeads} tableRows={deliveries} hasSearch handleClick={handleTableClick} />
       </Wrapper>
-    </Private>
+    </>
   );
 }
 

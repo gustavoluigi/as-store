@@ -17,4 +17,24 @@ export default createGlobalStyle`
     font-weight: 700 !important;
     font-family: 'Sora', sans-serif;
   }
+
+  * {
+  scrollbar-width: thin;
+  scrollbar-color: blue rgba(75,85,99,.2);
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(75,85,99,.2);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(75,85,99,.4);
+  border-radius: 20px;
+  border: 3px solid rgba(75,85,99,.2);
+}
 `;
