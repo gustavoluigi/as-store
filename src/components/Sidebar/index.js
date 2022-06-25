@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import {
   Container,
+  HiLogoutStyled,
   HiMenuAlt1Styled,
   HiOutlineAdjustmentsStyled,
   HiOutlineDocumentTextStyled,
@@ -17,9 +18,11 @@ import {
   MobileNav,
 } from './styles';
 import asLogo from '../../assets/images/as-logo.png';
-import useMedia from '../../hooks/useMedia';
+import { useMedia } from '../../hooks/useMedia';
+import { useAuth } from '../../hooks/useAuth';
 
 function Sidebar() {
+  const { logout } = useAuth();
   const isMobile = useMedia(['(max-width: 768px)'], [true]);
   const [isActiveNavMobile, setIsActiveNavMobile] = useState(false);
 
@@ -81,6 +84,10 @@ function Sidebar() {
               <HiShoppingBagStyled />
               <span>Delivery</span>
             </NavLink>
+          </Item>
+          <Item className="group" onClick={logout}>
+            <HiLogoutStyled />
+            <span>Logout</span>
           </Item>
         </MobileNav>
       </List>

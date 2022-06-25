@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export default function useMedia(queries, values, defaultValue) {
+export const useMedia = (queries, values, defaultValue) => {
   // Array containing a media query list for each query
   const mediaQueryLists = queries.map((q) => window.matchMedia(q));
 
@@ -34,4 +34,4 @@ export default function useMedia(queries, values, defaultValue) {
   );
 
   return value;
-}
+};

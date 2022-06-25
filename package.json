@@ -6,6 +6,7 @@
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@react-pdf/renderer": "^2.2.0",
+    "@supabase/supabase-js": "^1.35.3",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
@@ -31,7 +32,8 @@
     "twin.macro": "^2.8.2",
     "util": "^0.12.4",
     "web-vitals": "^2.1.4",
-    "webpack": "^5.73.0"
+    "webpack": "^5.73.0",
+    "zustand": "^4.0.0-rc.1"
   },
   "scripts": {
     "start": "react-app-rewired start",

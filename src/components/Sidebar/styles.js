@@ -8,6 +8,7 @@ import {
   HiOutlinePresentationChartLine,
   HiShoppingBag,
   HiMenuAlt1,
+  HiLogout,
 } from 'react-icons/hi';
 import styled from 'styled-components';
 import tw from 'twin.macro';
@@ -43,6 +44,15 @@ export const Item = styled.li`
       ${tw`mx-4 font-normal`}
     }
   }
+
+  &:last-child {
+    font-size: 15px;
+    ${tw`hover:text-gray-800 hover:bg-gray-400 cursor-pointer flex items-center p-4 my-1 transition-colors hover:text-white hover:bg-gray-600 duration-200 text-gray-800 rounded-md px-5 dark:text-white`}
+
+    span {
+      ${tw`mx-4 font-normal`}
+    }
+  }
 `;
 
 export const HiOutlineAdjustmentsStyled = styled(HiOutlineAdjustments)`
@@ -67,5 +77,8 @@ export const HiShoppingBagStyled = styled(HiShoppingBag)`
   ${tw`h-5 w-5 text-black group-hover:text-white transition dark:text-white`}
 `;
 export const HiMenuAlt1Styled = styled(HiMenuAlt1)`
+  ${tw`h-5 w-5 text-black group-hover:text-white transition dark:text-white`}
+`;
+export const HiLogoutStyled = styled(HiLogout)`
   ${tw`h-5 w-5 text-black group-hover:text-white transition dark:text-white`}
 `;
