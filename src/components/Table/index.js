@@ -4,7 +4,7 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import {
-  TableStyled, Tr, TdWithImage, Th, WrapperTable, Pagination,
+  TableStyled, Tr, TdWithImage, Th, WrapperTable, Pagination, Checkbox,
 } from './styles';
 import Input from '../Form/Input';
 
@@ -78,9 +78,9 @@ function Table({
                 </TdWithImage> */}
               {filteredTableRows
                 && filteredTableRows.map((item) => (
-                  <Tr key={item.id ? item.id : item} onClick={() => handleClick(item.id)}>
+                  <Tr key={item.id ? item.id : item} hide={!!item.id} onClick={() => handleClick(item.id)}>
                     {hasSelection && (
-                      <td className="w-4 p-4">
+                      <Checkbox>
                         <div className="flex items-center">
                           <input
                             id="checkbox-table-search-1"
@@ -93,7 +93,7 @@ function Table({
                             checkbox
                           </label>
                         </div>
-                      </td>
+                      </Checkbox>
                     )}
                     {item
                       && Object.entries(item).map(([key, value]) => {

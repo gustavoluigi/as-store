@@ -1,6 +1,6 @@
-/* eslint-disable max-len */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useMutation, useQueries, useQueryClient } from 'react-query';
 import Input from '../../../components/Form/Input';
 import Textarea from '../../../components/Form/Textarea';
 import { Wrapper } from '../../../components/Layout/Wrapper';
@@ -12,80 +12,102 @@ import { formatPhone, formatCep, formatCpf } from '../../../utils';
 import BackButton from '../../../components/BackButton';
 import Table from '../../../components/Table/index';
 import OrdersService from '../../../services/OrdersService';
-import { formatDate } from '../../../utils/formatDate';
 
 function ShowCustomer() {
-  const tableHeads = ['ID', 'Data', 'Qt. Produtos', 'Subtotal', 'Desconto', 'Total', 'Obs', 'Pagamento'];
-  const navigate = useNavigate();
-  const [orders, setOrders] = useState();
-  const [enableEdit, setEnableEdit] = useState(false);
-  const [customer, setCustomer] = useState({
-    id: 0,
-    name: '',
-    phone: '',
-    address: '',
-    zipcode: '',
-    birthday: '',
-    cpf: '',
-    shoes: '',
-    top: '',
-    bottom: '',
-    desc: '',
-  });
   const { id: customerId } = useParams();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const tableHeads = [
+    'Data',
+    'Qt. Produtos',
+    'Subtotal',
+    'Desconto',
+    'Total',
+    'Obs',
+    'Pagamento',
+  ];
+  const [isEditing, setIsEditing] = useState(false);
+  const [fields, setFields] = useState({});
 
-  const getCustomer = async () => {
-    const customerDetails = await CustomersService.getCustomer(customerId);
+  const { mutate: deleteCustomer } = useMutation(CustomersService.deleteCustomer);
 
-    setCustomer(customerDetails);
-  };
+  const [{ data: customer, ...restCustomer }, { data: orders, ...restOrders }] = useQueries([
+    {
+      queryKey: ['customer', customerId],
+      queryFn: () => CustomersService.getCustomer(customerId),
+      onSuccess: (data) => setFields(data),
+    },
+    {
+      queryKey: ['ordersFromCustomer', customerId],
+      queryFn: () => OrdersService.listOrdersFromCustomer(customerId),
+    },
+  ]);
 
-  const loadOrders = async () => {
-    const ordersList = await OrdersService.listOrdersFromCustomer(customerId);
-    ordersList.sort(
-      (a, b) => new Date(`${b.date}`) - new Date(`${a.date}`),
+  const { mutate: editCustomer } = useMutation(CustomersService.editCustomer, {
+    onMutate: () => {
+      setIsEditing(false);
+    },
+    onSuccess: (data) => {
+      queryClient.setQueryData(['customer', customer.id], data);
+      triggerToast('success', 'Cliente editado com sucesso');
+    },
+    onError: (err) => {
+      triggerToast('error', err.message);
+    },
+  });
+
+  if (restCustomer.isLoading || restOrders.isLoading) {
+    return <div>Aguarde...</div>;
+  }
+  if (restCustomer.isError || restOrders.isError) {
+    return (
+      <div>Erro! {restCustomer.isError.message
+        ? restCustomer.isError.message
+        : restOrders.isError.message}
+      </div>
     );
-    const filteredOrdersList = ordersList.map((i) => ({
-      id: i.id,
-      date: formatDate(i.date),
-      qt_products: i.qt_products,
-      subtotal: i.subtotal,
-      discount: i.discount,
-      total: i.total,
-      obs: i.obs,
-      transaction: i.transaction,
-    }));
-    setOrders(filteredOrdersList);
+  }
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    if (name === 'phone') {
+      setFields({ ...fields, phone: formatPhone(value) });
+    } else if (name === 'zipcode') {
+      setFields({ ...fields, zipcode: formatCep(value) });
+    } else if (name === 'cpf') {
+      setFields({ ...fields, cpf: formatCpf(value) });
+    } else {
+      setFields({ ...fields, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await CustomersService.editCustomer(customerId, customer).then(triggerToast('success', 'Cliente editado com sucesso'));
-    setEnableEdit(false);
+    editCustomer(fields);
   };
 
   const handleEnableEdit = () => {
-    setEnableEdit(true);
+    setIsEditing(true);
   };
 
   const handleDelete = async () => {
-    await CustomersService.deleteCustomer(customerId)
-      .then(triggerToast('error', 'Cliente deletado'))
-      .finally(() => {
+    deleteCustomer(customerId, {
+      onSuccess: (data) => {
+        triggerToast('error', 'Cliente deletado');
         setTimeout(() => {
           navigate('/clientes');
         }, 2000);
-      });
+      },
+      onError: (err) => {
+        triggerToast('error', err.message);
+      },
+    });
   };
 
   const handleTableClick = (orderId) => {
     navigate(`/vendas/${orderId}`);
   };
-
-  useEffect(() => {
-    getCustomer();
-    loadOrders();
-  }, []);
 
   return (
     <>
@@ -107,18 +129,18 @@ function ShowCustomer() {
             id="name"
             name="name"
             type="text"
-            readOnly={!enableEdit}
-            value={customer.name ? customer.name : ''}
-            onChange={(event) => setCustomer((prevState) => ({ ...prevState, name: event.target.value }))}
+            readOnly={!isEditing}
+            value={fields.name ? fields.name : ''}
+            onChange={(event) => handleChange(event)}
           />
           <Input
             label="Telefone"
             id="phone"
             name="phone"
             type="text"
-            readOnly={!enableEdit}
-            value={customer.phone ? customer.phone : ''}
-            onChange={(event) => setCustomer((prevState) => ({ ...prevState, phone: formatPhone(event.target.value) }))}
+            readOnly={!isEditing}
+            value={fields.phone ? fields.phone : ''}
+            onChange={(event) => handleChange(event)}
             maxLength="15"
           />
           <Input
@@ -126,18 +148,18 @@ function ShowCustomer() {
             id="address"
             name="address"
             type="text"
-            readOnly={!enableEdit}
-            value={customer.address ? customer.address : ''}
-            onChange={(event) => setCustomer((prevState) => ({ ...prevState, address: event.target.value }))}
+            readOnly={!isEditing}
+            value={fields.address ? fields.address : ''}
+            onChange={(event) => handleChange(event)}
           />
           <Input
             label="CEP"
             id="zipcode"
             name="zipcode"
             type="text"
-            readOnly={!enableEdit}
-            value={customer.zipcode ? customer.zipcode : ''}
-            onChange={(event) => setCustomer((prevState) => ({ ...prevState, zipcode: formatCep(event.target.value) }))}
+            readOnly={!isEditing}
+            value={fields.zipcode ? fields.zipcode : ''}
+            onChange={(event) => handleChange(event)}
             maxLength="9"
           />
           <Input
@@ -145,18 +167,18 @@ function ShowCustomer() {
             id="birthday"
             name="birthday"
             type="date"
-            readOnly={!enableEdit}
-            value={customer.birthday ? customer.birthday : ''}
-            onChange={(event) => setCustomer((prevState) => ({ ...prevState, birthday: event.target.value }))}
+            readOnly={!isEditing}
+            value={fields.birthday ? fields.birthday : ''}
+            onChange={(event) => handleChange(event)}
           />
           <Input
             label="CPF"
             id="cpf"
             name="cpf"
             type="text"
-            readOnly={!enableEdit}
-            value={customer.cpf ? customer.cpf : ''}
-            onChange={(event) => setCustomer((prevState) => ({ ...prevState, cpf: formatCpf(event.target.value) }))}
+            readOnly={!isEditing}
+            value={fields.cpf ? fields.cpf : ''}
+            onChange={(event) => handleChange(event)}
             maxLength="14"
           />
           <Input
@@ -164,38 +186,38 @@ function ShowCustomer() {
             id="shoes"
             name="shoes"
             type="text"
-            readOnly={!enableEdit}
-            value={customer.shoes ? customer.shoes : ''}
-            onChange={(event) => setCustomer((prevState) => ({ ...prevState, shoes: event.target.value }))}
+            readOnly={!isEditing}
+            value={fields.shoes ? fields.shoes : ''}
+            onChange={(event) => handleChange(event)}
           />
           <Input
             label="Tamanho da parte de cima"
             id="top"
             name="top"
             type="text"
-            readOnly={!enableEdit}
-            value={customer.top ? customer.top : ''}
-            onChange={(event) => setCustomer((prevState) => ({ ...prevState, top: event.target.value }))}
+            readOnly={!isEditing}
+            value={fields.top ? fields.top : ''}
+            onChange={(event) => handleChange(event)}
           />
           <Input
             label="Tamanho da parte de baixo"
             id="bottom"
             name="bottom"
             type="text"
-            readOnly={!enableEdit}
-            value={customer.bottom ? customer.bottom : ''}
-            onChange={(event) => setCustomer((prevState) => ({ ...prevState, bottom: event.target.value }))}
+            readOnly={!isEditing}
+            value={fields.bottom ? fields.bottom : ''}
+            onChange={(event) => handleChange(event)}
           />
           <Textarea
             label="Observações"
             id="desc"
             name="desc"
             type="text"
-            readOnly={!enableEdit}
-            value={customer.desc ? customer.desc : ''}
-            onChange={(event) => setCustomer((prevState) => ({ ...prevState, desc: event.target.value }))}
+            readOnly={!isEditing}
+            value={fields.desc ? fields.desc : ''}
+            onChange={(event) => handleChange(event)}
           />
-          {enableEdit && <Button type="submit">Salvar</Button>}
+          {isEditing && <Button type="submit">Salvar</Button>}
         </form>
         <h3>Vendas</h3>
         <Table tableHeads={tableHeads} tableRows={orders} handleClick={handleTableClick} />

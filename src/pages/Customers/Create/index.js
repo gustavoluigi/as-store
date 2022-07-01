@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import { useState } from 'react';
+import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import Input from '../../../components/Form/Input';
 import Textarea from '../../../components/Form/Textarea';
@@ -19,18 +20,21 @@ function CreateCustomer() {
     zipcode: null,
   });
 
+  const { mutate: addCustomer } = useMutation(CustomersService.createCustomer);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await CustomersService.createCustomer(formData)
-      .then((res) => {
-        triggerToast('success', 'Cliente cadastrado com sucesso');
-        return res;
-      })
-      .then((res) => {
+    addCustomer(formData, {
+      onSuccess: (data) => {
+        triggerToast('success', 'Cliente criado com sucesso');
         setTimeout(() => {
-          navigate(`/clientes/${res.id}`);
+          navigate(`/clientes/${data.id}`);
         }, 2000);
-      });
+      },
+      onError: (error) => {
+        triggerToast('error', error.message);
+      },
+    });
   };
 
   return (

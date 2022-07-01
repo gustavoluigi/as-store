@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
@@ -9,16 +10,19 @@ import { AddIcon, Button } from './styles';
 
 function Customers() {
   const navigate = useNavigate();
-  const [customers, setCustomers] = useState();
-  const tableHeads = ['ID', 'Nome', 'Telefone', 'Endereço', 'CEP'];
+  // const tableHeads = ['ID', 'Nome', 'Telefone', 'Endereço', 'CEP'];
+  const tableHeads = ['Nome', 'Telefone', 'Endereço', 'CEP'];
 
-  const getCustomers = async () => {
-    const customersList = await CustomersService.listCustomers().then((res) => res.map((i) => ({
-      ...i,
-      phone: formatPhone(i.phone),
-    })));
-    setCustomers(customersList);
-  };
+  const {
+    data: customers, error, isError, isLoading,
+  } = useQuery('customers', CustomersService.listCustomers);
+
+  if (isLoading) {
+    return <div>Aguarde...</div>;
+  }
+  if (isError) {
+    return <div>Erro! {error.message}</div>;
+  }
 
   const handleTableClick = (customerId) => {
     navigate(`../${customerId}`);
@@ -27,10 +31,6 @@ function Customers() {
   const handleAddClick = () => {
     navigate('../criar');
   };
-
-  useEffect(() => {
-    getCustomers();
-  }, []);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import tw from 'twin.macro';
 
 export const WrapperTable = styled.div`
@@ -6,6 +6,18 @@ export const WrapperTable = styled.div`
 
   >div {
     ${tw`inline-block min-w-full shadow rounded-lg overflow-hidden`}
+  }
+`;
+
+export const Checkbox = styled.div`
+  ${tw`w-4 p-4`}
+
+  >div {
+    ${tw`flex items-center`}
+
+    input {
+      ${tw`w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600`}
+    }
   }
 `;
 
@@ -40,6 +52,13 @@ export const TdWithImage = styled.td`
 `;
 export const Tr = styled.tr`
   ${tw`bg-white hover:bg-gray-300 transition`}
+
+  ${(props) => props.hide
+    && css`
+      td {
+        ${tw`first:hidden`}
+      }
+    `}
   td {
     ${tw`px-5 py-5 border-b border-gray-200 text-sm`}
 

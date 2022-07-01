@@ -2,6 +2,7 @@
 /* eslint-disable no-param-reassign */
 import ProductsService from './ProductsService';
 import HttpClient from './utils/HttpClient';
+import { supabase } from './utils/supabaseClient';
 
 class OrdersService {
   async listOrders() {
@@ -50,8 +51,26 @@ class OrdersService {
   }
 
   async listOrdersFromCustomer(customerId) {
-    const { data: response } = await HttpClient.get(`/orders?customerId=${customerId}`).then((res) => res);
-    return response;
+    const { data: orders, error } = await supabase
+      .from('orders')
+      .select('*, transactions (type)')
+      .eq('customer_id', customerId)
+      .order('date', { ascending: true });
+
+    if (error) throw error;
+
+    const orderList = orders.map((item) => ({
+      id: item.id,
+      date: item.date,
+      qt_products: item.qt_products,
+      subtotal: item.subtotal,
+      discount: item.discount,
+      total: item.total,
+      obs: item.obs,
+      transaction: item.transactions.type,
+    }));
+
+    return orderList;
   }
 
   async getOrder(orderId) {
