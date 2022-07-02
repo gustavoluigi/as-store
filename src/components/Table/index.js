@@ -1,17 +1,30 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable consistent-return */
-/* eslint-disable max-len */
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import {
-  TableStyled, Tr, TdWithImage, Th, WrapperTable, Pagination, Checkbox,
+  TableStyled,
+  Tr,
+  TdWithImage,
+  Th,
+  WrapperTable,
+  Pagination,
+  Checkbox,
 } from './styles';
 import Input from '../Form/Input';
-
 import { formatPrice } from '../../utils';
+import SearchBox from '../SerachBox';
 
 function Table({
-  tableHeads, tableRows, handleClick, hasSearch, searchField, hasSelection, handleSelect, qtEditable, updateQt,
+  tableHeads,
+  tableRows,
+  handleClick,
+  hasSearch,
+  searchField,
+  hasSelection,
+  handleSelect,
+  qtEditable,
+  updateQt,
 }) {
   const [filteredTableRows, setFilteredTableRows] = useState(tableRows);
 
@@ -19,7 +32,9 @@ function Table({
     if (!searchTerm) {
       setFilteredTableRows(tableRows);
     } else {
-      setFilteredTableRows(tableRows.filter((item) => item[searchField].toLowerCase().includes(searchTerm.toLowerCase())));
+      setFilteredTableRows(tableRows.filter((item) => item[searchField]
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())));
     }
   };
 
@@ -28,7 +43,9 @@ function Table({
   }, [tableRows]);
   return (
     <>
+      <SearchBox />
       {hasSearch && (
+
         <div className="my-2 flex sm:flex-row flex-col">
           <div className="block relative">
             <Input
@@ -78,7 +95,11 @@ function Table({
                 </TdWithImage> */}
               {filteredTableRows
                 && filteredTableRows.map((item) => (
-                  <Tr key={item.id ? item.id : item} hide={!!item.id} onClick={() => handleClick(item.id)}>
+                  <Tr
+                    key={item.id ? item.id : item}
+                    hide={!!item.id}
+                    onClick={() => handleClick(item.id)}
+                  >
                     {hasSelection && (
                       <Checkbox>
                         <div className="flex items-center">

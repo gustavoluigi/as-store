@@ -3,10 +3,11 @@ import HttpClient from './utils/HttpClient';
 import { supabase } from './utils/supabaseClient';
 
 class CustomersService {
-  async listCustomers() {
+  async listCustomers(searchTerm = null) {
     const { data: customers, error } = await supabase
       .from('customers')
       .select('*')
+      .ilike('name', `%${searchTerm || ''}%`)
       .order('name', { ascending: true });
 
     if (error) throw error;

@@ -4,25 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
+import { useDebounce } from '../../../hooks/useDebounce';
 import CustomersService from '../../../services/CustomersService';
-import { formatPhone } from '../../../utils';
 import { AddIcon, Button } from './styles';
 
 function Customers() {
   const navigate = useNavigate();
-  // const tableHeads = ['ID', 'Nome', 'Telefone', 'Endereço', 'CEP'];
+  const [searchTerm, setSearchTerm] = useState('');
+  const debounceSearch = useDebounce(searchTerm, 500);
   const tableHeads = ['Nome', 'Telefone', 'Endereço', 'CEP'];
 
   const {
     data: customers, error, isError, isLoading,
-  } = useQuery('customers', CustomersService.listCustomers);
-
-  if (isLoading) {
-    return <div>Aguarde...</div>;
-  }
-  if (isError) {
-    return <div>Erro! {error.message}</div>;
-  }
+  } = useQuery(['customers', { debounceSearch }], () => CustomersService.listCustomers(debounceSearch));
 
   const handleTableClick = (customerId) => {
     navigate(`../${customerId}`);
@@ -30,6 +24,10 @@ function Customers() {
 
   const handleAddClick = () => {
     navigate('../criar');
+  };
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
   };
 
   return (
@@ -40,12 +38,24 @@ function Customers() {
       </Button>
       <PageTitle>Clientes</PageTitle>
       <Wrapper>
+        {isLoading
+        && (
+          <div>Aguarde...</div>
+        )}
+        {isError
+        && (
+          <div>Erro! {error.message}</div>
+        )}
+
+        {(!isLoading && !isError)
+        && (
         <Table
           tableHeads={tableHeads}
           tableRows={customers}
           hasSearch
           handleClick={handleTableClick}
         />
+        )}
       </Wrapper>
     </>
   );
