@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import Input from '../../../components/Form/Input';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
@@ -15,7 +16,10 @@ function Customers() {
   const tableHeads = ['Nome', 'Telefone', 'Endereço', 'CEP'];
 
   const {
-    data: customers, error, isError, isLoading,
+    data: customers,
+    error,
+    isError,
+    isLoading,
   } = useQuery(['customers', { debounceSearch }], () => CustomersService.listCustomers(debounceSearch));
 
   const handleTableClick = (customerId) => {
@@ -37,24 +41,18 @@ function Customers() {
         Novo cliente
       </Button>
       <PageTitle>Clientes</PageTitle>
-      <Wrapper>
-        {isLoading
-        && (
-          <div>Aguarde...</div>
-        )}
-        {isError
-        && (
-          <div>Erro! {error.message}</div>
-        )}
 
-        {(!isLoading && !isError)
-        && (
-        <Table
-          tableHeads={tableHeads}
-          tableRows={customers}
-          hasSearch
-          handleClick={handleTableClick}
+      <Wrapper>
+        <Input
+          label="Pesquisar"
+          value={searchTerm}
+          onChange={handleSearch}
+          placeholder="Pesquise pelo nome do cliente:"
         />
+        {isLoading && <div>Aguarde...</div>}
+        {isError && <div>Erro! {error.message}</div>}
+        {!isLoading && !isError && (
+          <Table tableHeads={tableHeads} tableRows={customers} handleClick={handleTableClick} />
         )}
       </Wrapper>
     </>

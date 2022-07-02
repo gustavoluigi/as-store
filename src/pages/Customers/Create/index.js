@@ -15,9 +15,17 @@ function CreateCustomer() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: null,
+    email: null,
     phone: null,
     address: null,
     zipcode: null,
+    birthday: null,
+    cpf: null,
+    shoes: null,
+    top: null,
+    bottom: null,
+    desc: null,
+
   });
 
   const { mutate: addCustomer } = useMutation(CustomersService.createCustomer);
@@ -50,6 +58,14 @@ function CreateCustomer() {
             type="text"
             value={formData.name ? formData.name : ''}
             onChange={(event) => setFormData((prevState) => ({ ...prevState, name: event.target.value }))}
+          />
+          <Input
+            label="E-mail"
+            id="email"
+            name="email"
+            type="text"
+            value={formData.email ? formData.email : ''}
+            onChange={(event) => setFormData((prevState) => ({ ...prevState, email: event.target.value }))}
           />
           <Input
             label="Telefone"

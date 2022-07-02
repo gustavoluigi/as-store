@@ -134,6 +134,15 @@ function ShowCustomer() {
             onChange={(event) => handleChange(event)}
           />
           <Input
+            label="Email"
+            id="email"
+            name="email"
+            type="text"
+            readOnly={!isEditing}
+            value={fields.email ? fields.email : ''}
+            onChange={(event) => handleChange(event)}
+          />
+          <Input
             label="Telefone"
             id="phone"
             name="phone"
