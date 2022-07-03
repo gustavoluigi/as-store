@@ -1,40 +1,66 @@
 /* eslint-disable max-len */
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import { useState } from 'react';
 import { capitilize, formatPrice } from '../../../utils';
 import GoalsService from '../../../services/GoalsService';
 import Table from '../../../components/Table';
 import PageTitle from '../../../components/PageTitle';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import { AddIcon, Button } from './styles';
+import Select from '../../../components/Form/Select';
 
 function Goals() {
   const navigate = useNavigate();
-  const [goals, setGoals] = useState();
-  const tableHeads = ['ID', 'Meta', 'Total vendido', 'Data'];
+  const tableHeads = ['Meta', 'Total vendido', 'Data'];
+  const [selectedMonth, setSelectMonth] = useState();
+  const months = [
+    { key: 0, value: 0, label: 'Todos' },
+    { key: 1, value: 1, label: 'Janeiro' },
+    { key: 2, value: 2, label: 'Fevereiro' },
+    { key: 3, value: 3, label: 'Março' },
+    { key: 4, value: 4, label: 'Abril' },
+    { key: 5, value: 5, label: 'Maio' },
+    { key: 6, value: 6, label: 'Junho' },
+    { key: 7, value: 7, label: 'Julho' },
+    { key: 8, value: 8, label: 'Agosto' },
+    { key: 9, value: 9, label: 'Setembro' },
+    { key: 10, value: 10, label: 'Outubro' },
+    { key: 11, value: 11, label: 'Novembro' },
+    { key: 12, value: 12, label: 'Dezembro' },
+  ];
 
-  const loadGeals = async () => {
-    const goalsList = await GoalsService.listGoalsAndOrders();
-    goalsList.sort(
-      (a, b) => new Date(`${parseInt(a.year, 10)}/${parseInt(a.month, 10)}`)
-        - new Date(`${parseInt(b.year, 10)}/${parseInt(b.month, 10)}`),
-    );
-    const filteredGoalsList = goalsList.map((i) => ({
-      id: i.id,
-      goal: formatPrice(i.goal),
-      totalValue: formatPrice(i.orders.reduce((acc, obj) => acc + obj.total, 0)),
-      date: `${capitilize(new Date(i.month).toLocaleString('default', { month: 'long' }))} de ${i.year}`,
-    }));
-    setGoals(filteredGoalsList);
-  };
-
-  useEffect(() => {
-    loadGeals();
-  }, []);
+  const {
+    data: goals, error, isError, isLoading,
+  } = useQuery(['goals', { selectedMonth }], () => GoalsService.listGoalsAndOrders(selectedMonth), {
+    select: ({ goals: goalsList, orders }) => {
+      const reducedGoalsList = goalsList.map((goal) => {
+        const { month, year } = goal;
+        const total = orders.filter((order) => {
+          const orderDate = new Date(order.date);
+          return orderDate.getMonth() + 1 === month && orderDate.getFullYear() === year;
+        }).reduce((acc, order) => acc + order.total, 0);
+        return {
+          id: goal.id,
+          goal: formatPrice(goal.goal),
+          total: formatPrice(total),
+          date: `${capitilize(new Date(goal.year, goal.month - 1).toLocaleDateString('default', {
+            month: 'long',
+          }))} de ${goal.year}`,
+        };
+      });
+      return reducedGoalsList;
+    },
+  });
 
   const handleAddClick = () => {
     navigate('../criar');
   };
+
+  const handleChange = (event) => {
+    setSelectMonth(event.target.value);
+  };
+
   return (
     <>
       <Button onClick={handleAddClick}>
@@ -43,7 +69,11 @@ function Goals() {
       </Button>
       <PageTitle>Metas</PageTitle>
       <Wrapper>
-        <Table tableRows={goals} tableHeads={tableHeads} hasSearch searchField="date" />
+        <Select label="Mês" options={months} onChange={(event) => handleChange(event)} />
+        {isLoading && (<div>Aguarde...</div>)}
+        {isError && (<div>Erro! {error.message}</div>)}
+        {(!isLoading && !isError)
+        && (<Table tableRows={goals} tableHeads={tableHeads} />)}
       </Wrapper>
     </>
   );

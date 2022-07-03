@@ -13,7 +13,6 @@ import {
 } from './styles';
 import Input from '../Form/Input';
 import { formatPrice } from '../../utils';
-import SearchBox from '../SerachBox';
 
 function Table({
   tableHeads,
@@ -43,7 +42,6 @@ function Table({
   }, [tableRows]);
   return (
     <>
-      <SearchBox />
       {hasSearch && (
 
         <div className="my-2 flex sm:flex-row flex-col">
@@ -148,7 +146,7 @@ function Table({
                           return (
                             <td key={`${key}-${value}`}>
                               <p>
-                                {key === 'price' || key === 'total' || key === 'subtotal' ? formatPrice(value) : value}
+                                {key === 'price' || key === 'subtotal' ? formatPrice(value) : value}
                               </p>
                             </td>
                           );

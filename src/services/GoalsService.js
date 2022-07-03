@@ -2,23 +2,35 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
 import HttpClient from './utils/HttpClientNew';
+import { supabase } from './utils/supabaseClient';
 
 class GoalsService {
   async listGoals() {
-    const response = await HttpClient.get('/goals');
-    return response;
+    const { data: goals, error } = await supabase
+      .from('goals')
+      .select('*');
+    if (error) throw error;
+    return goals;
   }
 
-  async listGoalsAndOrders() {
-    const goals = await HttpClient.get('/goals');
+  async listGoalsAndOrders(selectedMonth = 0) {
+    const parserSelectedMonth = parseInt(selectedMonth, 10);
+    const { data: orders, error: ordersError } = await supabase
+      .from('orders')
+      .select('total, date');
 
-    const newGoals = await Promise.all(goals.map(async (i) => {
-      const ordersFromMonth = await HttpClient.get(`/orders?date_like=${i.year}-${i.month}&_expand=customer`);
-      Object.assign(i, { orders: ordersFromMonth });
-      return i;
-    }));
+    if (ordersError) throw ordersError;
 
-    return newGoals;
+    let queryGoals = supabase
+      .from('goals')
+      .select('*');
+
+    if (parserSelectedMonth !== 0) { queryGoals = queryGoals.eq('month', parserSelectedMonth); }
+
+    const { data: goals, goalsError } = await queryGoals;
+    if (goalsError) throw goalsError;
+
+    return { orders, goals };
   }
 
   async getCurrentGoalsAndOrders() {
@@ -32,37 +44,45 @@ class GoalsService {
       stats,
       orders,
     };
-    // const goals = await HttpClient.get(`/goals?month=${currentMonth}&year=${currentYear}`);
-    // // console.log(goals);
-
-    // const currentMonthOrders = await HttpClient.get(`/orders?date_like=${currentYear}-${currentMonth}&_expand=customer`);
-
-    // const response = {
-    //   goals,
-    //   currentMonthOrders,
-    // };
-    // return response;
 
     return response;
   }
 
   async createGoal(goal) {
-    const findGoal = await HttpClient.get(`/goals?month=${goal.month}&year=${goal.year}`);
-    const response = new Promise((resolve, reject) => {
-      const validMonth = goal.month > 0 && goal.month < 13;
-      if (findGoal.length === 0 && validMonth) {
-        const postResponse = HttpClient.post('/goals', goal);
-        resolve(postResponse);
-      } else if (!validMonth) {
-        const json = { msg: 'Digite um mês válido' };
-        reject(json);
-      } else {
-        const json = { msg: 'Já existe uma meta criada para esse mês!' };
-        reject(json);
-      }
-    });
+    console.log('goal', goal);
+    const { data: goalExists, error: errorGoalExists } = await supabase
+      .from('goals')
+      .select('*')
+      .eq('month', goal.month)
+      .eq('year', goal.year)
+      .single();
 
-    return response;
+    if (errorGoalExists) throw errorGoalExists;
+
+    if (goalExists) throw Object.assign(new Error('Já existe uma meta criada para esse mês'), { status: 409 });
+
+    const { data, error } = await supabase
+      .from('goals')
+      .insert([goal]);
+
+    if (error) throw error;
+    return data;
+    // const findGoal = await HttpClient.get(`/goals?month=${goal.month}&year=${goal.year}`);
+    // const response = new Promise((resolve, reject) => {
+    //   const validMonth = goal.month > 0 && goal.month < 13;
+    //   if (findGoal.length === 0 && validMonth) {
+    //     const postResponse = HttpClient.post('/goals', goal);
+    //     resolve(postResponse);
+    //   } else if (!validMonth) {
+    //     const json = { msg: 'Digite um mês válido' };
+    //     reject(json);
+    //   } else {
+    //     const json = { msg: 'Já existe uma meta criada para esse mês!' };
+    //     reject(json);
+    //   }
+    // });
+
+    // return response;
   }
 }
 

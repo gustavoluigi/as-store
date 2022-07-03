@@ -25,7 +25,6 @@ function CreateCustomer() {
     top: null,
     bottom: null,
     desc: null,
-
   });
 
   const { mutate: addCustomer } = useMutation(CustomersService.createCustomer);
