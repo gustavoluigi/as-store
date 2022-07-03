@@ -1,23 +1,30 @@
 /* eslint-disable max-len */
 // import HttpClient from './utils/HttpClient';
 import HttpClient from './utils/HttpClientNew';
+import { supabase } from './utils/supabaseClient';
 
 class ProductsService {
   async listProducts() {
-    const response = await HttpClient.get('/products').then((res) => res);
-    const productsList = response.map((item) => ({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      size: item.size,
-      color: item.color,
-      brand: item.brand,
-      desc: item.desc,
-      storage: item.storage,
-      ref: item.ref,
-      sku: item.sku,
+    const { data: products, error } = await supabase
+      .from('products')
+      .select(`*,
+      brands(
+        name
+      )`);
+
+    const formatedProducts = products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      desc: product.desc,
+      brand: product.brands.name,
     }));
-    return productsList;
+
+    console.log(formatedProducts);
+
+    if (error) throw error;
+
+    return formatedProducts;
   }
 
   async getProduct(productId) {
@@ -26,8 +33,35 @@ class ProductsService {
   }
 
   async createProduct(product) {
-    const response = await HttpClient.post('/products', product).then((res) => res);
-    return response;
+    const newProduct = {
+      name: product.name,
+      price: product.price,
+      desc: product.desc,
+      brand_id: product.brand_id,
+    };
+
+    const { data: productCreated, error: errorProduct } = await supabase
+      .from('products')
+      .insert(newProduct);
+
+    if (errorProduct) throw errorProduct;
+
+    const newProductVariation = {
+      product_id: productCreated[0].id,
+      color_id: product.color_id,
+      size_id: product.size_id,
+      storage: product.storage,
+      ref: product.ref,
+      sku: product.sku,
+    };
+
+    const { data, error } = await supabase
+      .from('product_variations')
+      .insert(newProductVariation);
+
+    if (error) throw error;
+
+    return data;
   }
 
   async editProduct(productId, product) {

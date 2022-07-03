@@ -49,7 +49,6 @@ class GoalsService {
   }
 
   async createGoal(goal) {
-    console.log('goal', goal);
     const { data: goalExists, error: errorGoalExists } = await supabase
       .from('goals')
       .select('*')

@@ -1,11 +1,17 @@
 /* eslint-disable max-len */
 import { useState } from 'react';
+import { useMutation, useQueries } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import Datalist from '../../../components/Form/Datalist';
 import Input from '../../../components/Form/Input';
+import Select from '../../../components/Form/Select';
 import Textarea from '../../../components/Form/Textarea';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
+import BrandsService from '../../../services/BrandsService';
+import ColorsService from '../../../services/ColorsService';
 import ProductsService from '../../../services/ProductsService';
+import SizesService from '../../../services/SizesService';
 import { formatPrice, unformatPrice } from '../../../utils';
 import { Toast, triggerToast } from '../../../utils/triggerToast';
 import { Button } from './styles';
@@ -14,34 +20,113 @@ function CreateProduct() {
   const navigate = useNavigate();
   const [product, setProduct] = useState({
     name: null,
-    price: 'R$ 123,22',
+    price: null,
     desc: null,
-    color: null,
-    size: null,
-    brand: null,
+    color_id: null,
+    size_id: null,
+    brand_id: null,
     storage: null,
     ref: null,
     sku: null,
   });
+
+  const [
+    { data: brands, ...restBrands },
+    { data: sizes, ...restSizes },
+    { data: colors, ...restColors },
+  ] = useQueries([
+    {
+      queryKey: ['brands'],
+      queryFn: () => BrandsService.getBrands(),
+      select: (data) => data.map((brand) => ({
+        value: brand.id,
+        label: brand.name,
+      })),
+    },
+    {
+      queryKey: ['sizes'],
+      queryFn: () => SizesService.getSizes(),
+      select: (data) => data.map((size) => ({
+        value: size.id,
+        label: size.name,
+      })),
+    },
+    {
+      queryKey: ['colors'],
+      queryFn: () => ColorsService.getColors(),
+      select: (data) => data.map((color) => ({
+        value: color.id,
+        label: color.name,
+      })),
+    },
+  ]);
+
+  const { mutate: createBrand } = useMutation(BrandsService.createBrand, {
+    onSuccess: (data) => {
+      restBrands.refetch();
+      triggerToast('success', 'Marca adicionada com sucesso');
+    },
+    onError: (err) => {
+      triggerToast('error', err.message);
+    },
+  });
+  const { mutate: createColor } = useMutation(ColorsService.createColor, {
+    onSuccess: (data) => {
+      restColors.refetch();
+      triggerToast('success', 'Cor adicionada com sucesso');
+    },
+    onError: (err) => {
+      triggerToast('error', err.message);
+    },
+  });
+  const { mutate: createSize } = useMutation(SizesService.createSize, {
+    onSuccess: (data) => {
+      restSizes.refetch();
+      triggerToast('success', 'Tamanho adicionado com sucesso');
+    },
+    onError: (err) => {
+      triggerToast('error', err.message);
+    },
+  });
+  const { mutate: createProduct } = useMutation(ProductsService.createProduct, {
+    onSuccess: (data) => {
+      triggerToast('success', 'Produto cadastrado com sucesso');
+    },
+    onError: (err) => {
+      triggerToast('error', err.message);
+    },
+  });
+
+  const handleSelectChange = ({ value }, { name, action }) => {
+    if (action === 'create-option') {
+      if (name === 'color') createColor({ name: value });
+      if (name === 'brand') createBrand({ name: value });
+      if (name === 'size') createSize({ name: value });
+    }
+    setProduct({ ...product, [name]: value });
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setProduct({
+      ...product,
+      [name]: value,
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // await ProductsService.createProduct(product)
-    //   .then((res) => {
-    //     triggerToast('success', 'Produto cadastrado com sucesso');
-    //     return res;
-    //   })
-    //   .then((res) => {
-    //     setTimeout(() => {
-    //       navigate(`/produtos/${res.id}`);
-    //     }, 2000);
-    //   });
-    console.log(product);
+    // TODO: Create only product variation
+    createProduct(product);
   };
+
   return (
     <>
       <Toast />
       <PageTitle>Novo produto</PageTitle>
       <Wrapper>
+        {(restBrands.isLoading && restColors.isLoading && restSizes.isLoading) && <p>Carregando...</p>}
+        {!restBrands.isLoading && !restColors.isLoading && !restSizes.isLoading && (
         <form onSubmit={handleSubmit}>
           <Input
             label="Nome"
@@ -49,7 +134,7 @@ function CreateProduct() {
             name="name"
             type="text"
             value={product.name ? product.name : ''}
-            onChange={(event) => setProduct((prevState) => ({ ...prevState, name: event.target.value }))}
+            onChange={handleChange}
           />
           <Input
             label="Preço"
@@ -57,7 +142,7 @@ function CreateProduct() {
             name="price"
             type="text"
             value={product.price ? product.price : ''}
-            onChange={(event) => setProduct((prevState) => ({ ...prevState, price: event.target.value }))}
+            onChange={handleChange}
           />
           <Textarea
             label="Descrição"
@@ -65,31 +150,34 @@ function CreateProduct() {
             name="desc"
             type="text"
             value={product.desc ? product.desc : ''}
-            onChange={(event) => setProduct((prevState) => ({ ...prevState, desc: event.target.value }))}
+            onChange={handleChange}
           />
-          <Input
-            label="Cor"
-            id="color"
-            name="color"
-            type="text"
-            value={product.color ? product.color : ''}
-            onChange={(event) => setProduct((prevState) => ({ ...prevState, color: event.target.value }))}
-          />
-          <Input
-            label="Tamanho"
-            id="size"
-            name="size"
-            type="text"
-            value={product.size ? product.size : ''}
-            onChange={(event) => setProduct((prevState) => ({ ...prevState, size: event.target.value }))}
-          />
-          <Input
+          <Datalist
             label="Marca"
             id="brand"
-            name="brand"
-            type="text"
-            value={product.brand ? product.brand : ''}
-            onChange={(event) => setProduct((prevState) => ({ ...prevState, brand: event.target.value }))}
+            name="brand_id"
+            list="brands"
+            placeholder="Selecione uma marca"
+            options={brands}
+            onChange={handleSelectChange}
+          />
+          <Datalist
+            label="Cor"
+            id="color"
+            name="color_id"
+            list="colors"
+            placeholder="Selecione uma cor"
+            options={colors}
+            onChange={handleSelectChange}
+          />
+          <Datalist
+            label="Tamanho"
+            id="size"
+            name="size_id"
+            list="sizes"
+            placeholder="Selecione um tamanho"
+            options={sizes}
+            onChange={handleSelectChange}
           />
           <Input
             label="Quantidade em estoque"
@@ -97,7 +185,7 @@ function CreateProduct() {
             name="storage"
             type="number"
             value={product.storage ? product.storage : ''}
-            onChange={(event) => setProduct((prevState) => ({ ...prevState, storage: event.target.value }))}
+            onChange={handleChange}
           />
           <Input
             label="Referência"
@@ -105,7 +193,7 @@ function CreateProduct() {
             name="ref"
             type="text"
             value={product.ref ? product.ref : ''}
-            onChange={(event) => setProduct((prevState) => ({ ...prevState, ref: event.target.value }))}
+            onChange={handleChange}
           />
           <Input
             label="SKU"
@@ -113,12 +201,14 @@ function CreateProduct() {
             name="sku"
             type="text"
             value={product.sku ? product.sku : ''}
-            onChange={(event) => setProduct((prevState) => ({ ...prevState, sku: event.target.value }))}
+            onChange={handleChange}
           />
           <Button type="submit">
             Criar produto
           </Button>
         </form>
+        )}
+
       </Wrapper>
     </>
   );

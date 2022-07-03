@@ -10,7 +10,7 @@ import { AddIcon, Button } from './styles';
 function Products() {
   const navigate = useNavigate();
   const [products, setProducts] = useState();
-  const tableHeads = ['ID', 'Nome', 'Preço', 'Tamanho', 'Cor', 'Marca', 'Descrição', 'Estoque', 'Referência', 'SKU'];
+  const tableHeads = ['Nome', 'Preço', 'Descrição', 'Marca'];
 
   const getProducts = async () => {
     const productsList = await ProductsService.listProducts();
