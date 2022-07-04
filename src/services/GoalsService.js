@@ -56,13 +56,11 @@ class GoalsService {
       .eq('year', goal.year)
       .single();
 
-    if (errorGoalExists) throw errorGoalExists;
-
     if (goalExists) throw Object.assign(new Error('Já existe uma meta criada para esse mês'), { status: 409 });
 
     const { data, error } = await supabase
       .from('goals')
-      .insert([goal]);
+      .insert(goal);
 
     if (error) throw error;
     return data;
