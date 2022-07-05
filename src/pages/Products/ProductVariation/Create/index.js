@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
-  useMutation, useQueries,
+  useMutation, useQueries, useQueryClient,
 } from 'react-query';
 import Input from '../../../../components/Form/Input';
 import { Wrapper } from '../../../../components/Layout/Wrapper';
@@ -16,6 +16,8 @@ import ColorsService from '../../../../services/ColorsService';
 import BackButton from '../../../../components/BackButton';
 
 function CreateProductVariation() {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { id: productId } = useParams();
   const [productName, setProductName] = useState('');
   const [productData, setProductData] = useState({
@@ -49,7 +51,6 @@ function CreateProductVariation() {
         value: size.id,
         label: size.name,
       })),
-      onSuccess: (data) => console.log('sizes', data),
     },
     {
       queryKey: ['colors'],
@@ -58,11 +59,18 @@ function CreateProductVariation() {
         value: color.id,
         label: color.name,
       })),
-      onSuccess: (data) => console.log('colors', data),
     },
   ]);
 
-  const { mutate: createVariation } = useMutation(ProductsService.createVariation);
+  const { mutate: createVariation } = useMutation(ProductsService.createVariation, {
+    onSuccess: (data) => {
+      queryClient.setQueryData(['variations', productId], data);
+      triggerToast('success', 'Variação criada com sucesso!');
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
+    },
+  });
 
   const { mutate: createColor } = useMutation(ColorsService.createColor, {
     onSuccess: (data) => {
@@ -97,11 +105,12 @@ function CreateProductVariation() {
       product_id: productId,
       color_id: productData.color.value,
       size_id: productData.size.value,
-      storage: parseInt(productData.storage, 10),
+      storage: +productData.storage,
       ref: productData.ref,
       sku: productData.sku,
     };
-    createVariation(newVariation);
+    console.log(newVariation);
+    // createVariation(newVariation);
   };
 
   const handleDelete = async () => {
