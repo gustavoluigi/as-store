@@ -33,6 +33,7 @@ function CreateProductVariation() {
   });
 
   const [
+    { data: product, ...restProduct },
     { data: sizes, ...restSizes },
     { data: colors, ...restColors },
   ] = useQueries([
@@ -48,6 +49,7 @@ function CreateProductVariation() {
         value: size.id,
         label: size.name,
       })),
+      onSuccess: (data) => console.log('sizes', data),
     },
     {
       queryKey: ['colors'],
@@ -56,6 +58,7 @@ function CreateProductVariation() {
         value: color.id,
         label: color.name,
       })),
+      onSuccess: (data) => console.log('colors', data),
     },
   ]);
 
@@ -90,7 +93,6 @@ function CreateProductVariation() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(productData);
     const newVariation = {
       product_id: productId,
       color_id: productData.color.value,
@@ -99,7 +101,6 @@ function CreateProductVariation() {
       ref: productData.ref,
       sku: productData.sku,
     };
-
     createVariation(newVariation);
   };
 
