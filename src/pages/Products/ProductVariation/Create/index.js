@@ -109,8 +109,7 @@ function CreateProductVariation() {
       ref: productData.ref,
       sku: productData.sku,
     };
-    console.log(newVariation);
-    // createVariation(newVariation);
+    createVariation(newVariation);
   };
 
   const handleDelete = async () => {
