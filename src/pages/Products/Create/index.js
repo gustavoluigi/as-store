@@ -22,8 +22,8 @@ function CreateProduct() {
     name: null,
     price: null,
     desc: null,
-    color_id: null,
-    size_id: null,
+    // color_id: null,
+    // size_id: null,
     brand_id: null,
     storage: null,
     ref: null,
@@ -32,8 +32,8 @@ function CreateProduct() {
 
   const [
     { data: brands, ...restBrands },
-    { data: sizes, ...restSizes },
-    { data: colors, ...restColors },
+    // { data: sizes, ...restSizes },
+    // { data: colors, ...restColors },
   ] = useQueries([
     {
       queryKey: ['brands'],
@@ -43,22 +43,22 @@ function CreateProduct() {
         label: brand.name,
       })),
     },
-    {
-      queryKey: ['sizes'],
-      queryFn: () => SizesService.getSizes(),
-      select: (data) => data.map((size) => ({
-        value: size.id,
-        label: size.name,
-      })),
-    },
-    {
-      queryKey: ['colors'],
-      queryFn: () => ColorsService.getColors(),
-      select: (data) => data.map((color) => ({
-        value: color.id,
-        label: color.name,
-      })),
-    },
+    // {
+    //   queryKey: ['sizes'],
+    //   queryFn: () => SizesService.getSizes(),
+    //   select: (data) => data.map((size) => ({
+    //     value: size.id,
+    //     label: size.name,
+    //   })),
+    // },
+    // {
+    //   queryKey: ['colors'],
+    //   queryFn: () => ColorsService.getColors(),
+    //   select: (data) => data.map((color) => ({
+    //     value: color.id,
+    //     label: color.name,
+    //   })),
+    // },
   ]);
 
   const { mutate: createBrand } = useMutation(BrandsService.createBrand, {
@@ -70,24 +70,24 @@ function CreateProduct() {
       triggerToast('error', err.message);
     },
   });
-  const { mutate: createColor } = useMutation(ColorsService.createColor, {
-    onSuccess: (data) => {
-      restColors.refetch();
-      triggerToast('success', 'Cor adicionada com sucesso');
-    },
-    onError: (err) => {
-      triggerToast('error', err.message);
-    },
-  });
-  const { mutate: createSize } = useMutation(SizesService.createSize, {
-    onSuccess: (data) => {
-      restSizes.refetch();
-      triggerToast('success', 'Tamanho adicionado com sucesso');
-    },
-    onError: (err) => {
-      triggerToast('error', err.message);
-    },
-  });
+  // const { mutate: createColor } = useMutation(ColorsService.createColor, {
+  //   onSuccess: (data) => {
+  //     restColors.refetch();
+  //     triggerToast('success', 'Cor adicionada com sucesso');
+  //   },
+  //   onError: (err) => {
+  //     triggerToast('error', err.message);
+  //   },
+  // });
+  // const { mutate: createSize } = useMutation(SizesService.createSize, {
+  //   onSuccess: (data) => {
+  //     restSizes.refetch();
+  //     triggerToast('success', 'Tamanho adicionado com sucesso');
+  //   },
+  //   onError: (err) => {
+  //     triggerToast('error', err.message);
+  //   },
+  // });
   const { mutate: createProduct } = useMutation(ProductsService.createProduct, {
     onSuccess: (data) => {
       triggerToast('success', 'Produto cadastrado com sucesso');
@@ -99,9 +99,9 @@ function CreateProduct() {
 
   const handleSelectChange = ({ value }, { name, action }) => {
     if (action === 'create-option') {
-      if (name === 'color') createColor({ name: value });
+      // if (name === 'color') createColor({ name: value });
       if (name === 'brand') createBrand({ name: value });
-      if (name === 'size') createSize({ name: value });
+      // if (name === 'size') createSize({ name: value });
     }
     setProduct({ ...product, [name]: value });
   };
@@ -125,8 +125,8 @@ function CreateProduct() {
       <Toast />
       <PageTitle>Novo produto</PageTitle>
       <Wrapper>
-        {(restBrands.isLoading && restColors.isLoading && restSizes.isLoading) && <p>Carregando...</p>}
-        {!restBrands.isLoading && !restColors.isLoading && !restSizes.isLoading && (
+        {restBrands.isLoading && <p>Carregando...</p>}
+        {!restBrands.isLoading && (
         <form onSubmit={handleSubmit}>
           <Input
             label="Nome"
@@ -161,7 +161,7 @@ function CreateProduct() {
             options={brands}
             onChange={handleSelectChange}
           />
-          <Datalist
+          {/* <Datalist
             label="Cor"
             id="color"
             name="color_id"
@@ -202,7 +202,7 @@ function CreateProduct() {
             type="text"
             value={product.sku ? product.sku : ''}
             onChange={handleChange}
-          />
+          /> */}
           <Button type="submit">
             Criar produto
           </Button>

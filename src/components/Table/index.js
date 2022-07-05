@@ -156,7 +156,7 @@ function Table({
                 ))}
             </tbody>
           </TableStyled>
-          {filteredTableRows && filteredTableRows.length > 10 && (
+          {/* {filteredTableRows && filteredTableRows.length > 10 && (
             <Pagination>
               <span>
                 Mostrando 1 a 4 de
@@ -170,7 +170,7 @@ function Table({
                 <button type="button">Próxima</button>
               </div>
             </Pagination>
-          )}
+          )} */}
         </div>
       </WrapperTable>
     </>

@@ -45,7 +45,6 @@ function Datalist({
       <SelectStyled
         options={options}
         classNamePrefix="react-select"
-        isClearable
         {...props}
       />
     </Wrapper>

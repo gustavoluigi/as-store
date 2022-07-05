@@ -15,6 +15,8 @@ import Orders from './pages/Orders/List';
 import Order from './pages/Orders/Show';
 import CreateProduct from './pages/Products/Create';
 import Products from './pages/Products/List';
+import CreateProductVariation from './pages/Products/ProductVariation/Create';
+import ShowProductVariation from './pages/Products/ProductVariation/Show';
 import Product from './pages/Products/Show';
 import Reports from './pages/Reports';
 import MonthStatsPDF from './pages/Reports/MonthStatsPDF';
@@ -72,8 +74,16 @@ export default function Router() {
           element: <CreateProduct />,
         },
         {
+          path: ':id/variacoes',
+          element: <ShowProductVariation />,
+        },
+        {
           path: ':id',
           element: <Product />,
+        },
+        {
+          path: ':id/variacoes/criar',
+          element: <CreateProductVariation />,
         },
       ],
     },
