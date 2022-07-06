@@ -131,9 +131,9 @@ class ProductsService {
     //   .from('product_variations')
     //   .insert(newProductVariation);
 
-    if (errorProduct) throw errorProduct;
+    // if (errorProduct) throw errorProduct;
 
-    return productCreated;
+    return productCreated[0];
   }
 
   async createVariation(productVariation) {
@@ -199,9 +199,33 @@ class ProductsService {
     return formatedVariation[0];
   }
 
-  async deleteProduct(productId) {
-    const response = await HttpClient.delete(`/products/${productId}`).then((res) => res);
-    return response;
+  async deleteProduct({ productId, variations }) {
+    const variationsIds = variations.map((variation) => variation.id);
+
+    const { error: errorVariations } = await supabase
+      .from('product_variations')
+      .delete()
+      .in('id', variationsIds);
+
+    if (errorVariations) throw errorVariations;
+
+    const { error } = await supabase
+      .from('products')
+      .delete()
+      .eq('id', productId);
+
+    if (error) throw error;
+  }
+
+  async deleteVariation(variationId) {
+    const { data: variation, error } = await supabase
+      .from('product_variations')
+      .delete()
+      .eq('id', variationId);
+
+    if (error) throw error;
+
+    return variation;
   }
 
   async decreaseProductQt(productId, qt = 1) {

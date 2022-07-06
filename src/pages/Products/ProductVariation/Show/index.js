@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   useMutation, useQueries, useQueryClient,
 } from 'react-query';
@@ -16,6 +16,7 @@ import ColorsService from '../../../../services/ColorsService';
 import BackButton from '../../../../components/BackButton';
 
 function ShowProductVariation() {
+  const navigate = useNavigate();
   const { id: productId } = useParams();
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
@@ -59,6 +60,16 @@ function ShowProductVariation() {
     },
     onError: (err) => {
       triggerToast('error', err.message);
+    },
+  });
+
+  const { mutate: deleteVariation } = useMutation(ProductsService.deleteVariation, {
+    onSuccess: () => {
+      triggerToast('success', 'Variação deletada com sucesso');
+      queryClient.refetchQueries(['product']);
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
     },
   });
 
@@ -111,13 +122,7 @@ function ShowProductVariation() {
   };
 
   const handleDelete = async () => {
-    // await ProductsService.deleteProduct(id)
-    //   .then(triggerToast('error', 'Produto deletado'))
-    //   .finally(() => {
-    //     setTimeout(() => {
-    //       navigate('/produtos');
-    //     }, 2000);
-    //   });
+    deleteVariation(productId);
   };
 
   const handleSelectChange = ({ value, label }, { name, action }) => {

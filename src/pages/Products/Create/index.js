@@ -91,6 +91,9 @@ function CreateProduct() {
   const { mutate: createProduct } = useMutation(ProductsService.createProduct, {
     onSuccess: (data) => {
       triggerToast('success', 'Produto cadastrado com sucesso');
+      setTimeout(() => {
+        navigate(`/produtos/${data.id}`);
+      }, 2000);
     },
     onError: (err) => {
       triggerToast('error', err.message);

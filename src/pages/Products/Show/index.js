@@ -77,6 +77,16 @@ function Product() {
     },
   });
 
+  const { mutate: deleteProduct } = useMutation(ProductsService.deleteProduct, {
+    onSuccess: () => {
+      triggerToast('success', 'Produto deletado com sucesso');
+      queryClient.refetchQueries(['products']);
+      setTimeout(() => {
+        navigate('/produtos');
+      }, 2000);
+    },
+  });
+
   if (restProduct.isLoading || restVariations.isLoading || restBrands.isLoading) {
     return <div>Aguarde...</div>;
   }
@@ -104,13 +114,10 @@ function Product() {
   };
 
   const handleDelete = async () => {
-    // await ProductsService.deleteProduct(id)
-    //   .then(triggerToast('error', 'Produto deletado'))
-    //   .finally(() => {
-    //     setTimeout(() => {
-    //       navigate('/produtos');
-    //     }, 2000);
-    //   });
+    console.log(variations);
+    if (window.confirm('Deseja realmente excluir este produto e todas as suas variações?')) {
+      deleteProduct({ productId, variations });
+    }
   };
 
   const handleChange = (e) => {
