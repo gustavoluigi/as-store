@@ -1,21 +1,19 @@
 import { useState } from 'react';
-import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
 import Input from '../../../components/Form/Input';
 import Select from '../../../components/Form/Select';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
-import GoalsService from '../../../services/GoalsService';
-import { triggerToast, Toast } from '../../../utils';
+import { useCreateGoal } from '../../../hooks/useGoals';
+import { Toast } from '../../../utils';
 import { Button } from './styles';
 
 function CreateGoal() {
-  const navigate = useNavigate();
   const [goalData, setGoalData] = useState({
     month: null,
     year: null,
     goal: null,
   });
+  const { handleCreate } = useCreateGoal(goalData);
 
   const months = [
     { key: 1, value: 1, label: 'Janeiro' },
@@ -32,30 +30,9 @@ function CreateGoal() {
     { key: 12, value: 12, label: 'Dezembro' },
   ];
 
-  const { mutate: addGoal } = useMutation(GoalsService.createGoal);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    addGoal(goalData, {
-      onSuccess: (data) => {
-        triggerToast('success', 'Meta criada com sucesso');
-        // setTimeout(() => {
-        //   navigate('/metas');
-        // }, 2000);
-      },
-      onError: (error) => {
-        triggerToast('error', error.message);
-      },
-    });
-    // await GoalsService.createGoal({ goal, month, year })
-    //   .then((res) => {
-    //     if (res.msg) {
-    //       triggerToast('error', res.msg);
-    //     } else {
-    //       triggerToast('success', 'Meta criada com sucesso!');
-    //     }
-    //   })
-    //   .catch((err) => triggerToast('error', err.msg));
+    handleCreate();
   };
 
   const handleChange = (event) => {

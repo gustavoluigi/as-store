@@ -9,6 +9,7 @@ import PageTitle from '../../../components/PageTitle';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import { AddIcon, Button } from './styles';
 import Select from '../../../components/Form/Select';
+import { useGetGoals } from '../../../hooks/useGoals';
 
 function Goals() {
   const navigate = useNavigate();
@@ -31,27 +32,8 @@ function Goals() {
   ];
 
   const {
-    data: goals, error, isError, isLoading,
-  } = useQuery(['goals', { selectedMonth }], () => GoalsService.listGoalsAndOrders(selectedMonth), {
-    select: ({ goals: goalsList, orders }) => {
-      const reducedGoalsList = goalsList.map((goal) => {
-        const { month, year } = goal;
-        const total = orders.filter((order) => {
-          const orderDate = new Date(order.date);
-          return orderDate.getMonth() + 1 === month && orderDate.getFullYear() === year;
-        }).reduce((acc, order) => acc + order.total, 0);
-        return {
-          id: goal.id,
-          goal: formatPrice(goal.goal),
-          total: formatPrice(total),
-          date: `${capitilize(new Date(goal.year, goal.month - 1).toLocaleDateString('default', {
-            month: 'long',
-          }))} de ${goal.year}`,
-        };
-      });
-      return reducedGoalsList;
-    },
-  });
+    goals, error, isError, isLoading,
+  } = useGetGoals(selectedMonth);
 
   const handleAddClick = () => {
     navigate('../criar');

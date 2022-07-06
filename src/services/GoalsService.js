@@ -64,22 +64,6 @@ class GoalsService {
 
     if (error) throw error;
     return data;
-    // const findGoal = await HttpClient.get(`/goals?month=${goal.month}&year=${goal.year}`);
-    // const response = new Promise((resolve, reject) => {
-    //   const validMonth = goal.month > 0 && goal.month < 13;
-    //   if (findGoal.length === 0 && validMonth) {
-    //     const postResponse = HttpClient.post('/goals', goal);
-    //     resolve(postResponse);
-    //   } else if (!validMonth) {
-    //     const json = { msg: 'Digite um mês válido' };
-    //     reject(json);
-    //   } else {
-    //     const json = { msg: 'Já existe uma meta criada para esse mês!' };
-    //     reject(json);
-    //   }
-    // });
-
-    // return response;
   }
 }
 
