@@ -1,47 +1,35 @@
 /* eslint-disable max-len */
 import { useState } from 'react';
-import { useMutation } from 'react-query';
-import { useNavigate } from 'react-router-dom';
 import Input from '../../../components/Form/Input';
 import Textarea from '../../../components/Form/Textarea';
 import PageTitle from '../../../components/PageTitle';
-import CustomersService from '../../../services/CustomersService';
+import { useCreateCustomer } from '../../../hooks/useCustomer';
 import { formatCep, formatPhone } from '../../../utils';
 import { formatCpf } from '../../../utils/formatCpf';
-import { Toast, triggerToast } from '../../../utils/triggerToast';
+import { Toast } from '../../../utils/triggerToast';
 import { Button, Wrapper } from './styles';
 
 function CreateCustomer() {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: null,
-    email: null,
-    phone: null,
-    address: null,
-    zipcode: null,
-    birthday: null,
-    cpf: null,
-    shoes: null,
-    top: null,
-    bottom: null,
-    desc: null,
-  });
-
-  const { mutate: addCustomer } = useMutation(CustomersService.createCustomer);
+  const [formData, setFormData] = useState({});
+  const { handleCreate } = useCreateCustomer(formData);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    addCustomer(formData, {
-      onSuccess: (data) => {
-        triggerToast('success', 'Cliente criado com sucesso');
-        setTimeout(() => {
-          navigate(`/clientes/${data.id}`);
-        }, 2000);
-      },
-      onError: (error) => {
-        triggerToast('error', error.message);
-      },
-    });
+    handleCreate();
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === 'phone') {
+      setFormData({ ...formData, phone: formatPhone(value) });
+    } else if (name === 'zipcode') {
+      setFormData({ ...formData, zipcode: formatCep(value) });
+    } else if (name === 'cpf') {
+      setFormData({ ...formData, cpf: formatCpf(value) });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   return (
@@ -56,7 +44,7 @@ function CreateCustomer() {
             name="name"
             type="text"
             value={formData.name ? formData.name : ''}
-            onChange={(event) => setFormData((prevState) => ({ ...prevState, name: event.target.value }))}
+            onChange={handleChange}
           />
           <Input
             label="E-mail"
@@ -64,7 +52,7 @@ function CreateCustomer() {
             name="email"
             type="text"
             value={formData.email ? formData.email : ''}
-            onChange={(event) => setFormData((prevState) => ({ ...prevState, email: event.target.value }))}
+            onChange={handleChange}
           />
           <Input
             label="Telefone"
@@ -72,7 +60,7 @@ function CreateCustomer() {
             name="phone"
             type="text"
             value={formData.phone ? formData.phone : ''}
-            onChange={(event) => setFormData((prevState) => ({ ...prevState, phone: formatPhone(event.target.value) }))}
+            onChange={handleChange}
             maxLength="15"
           />
           <Input
@@ -81,7 +69,7 @@ function CreateCustomer() {
             name="address"
             type="text"
             value={formData.address ? formData.address : ''}
-            onChange={(event) => setFormData((prevState) => ({ ...prevState, address: event.target.value }))}
+            onChange={handleChange}
           />
           <Input
             label="CEP"
@@ -89,7 +77,7 @@ function CreateCustomer() {
             name="zipcode"
             type="text"
             value={formData.zipcode ? formData.zipcode : ''}
-            onChange={(event) => setFormData((prevState) => ({ ...prevState, zipcode: formatCep(event.target.value) }))}
+            onChange={handleChange}
             maxLength="9"
           />
           <Input
@@ -98,7 +86,7 @@ function CreateCustomer() {
             name="birthday"
             type="date"
             value={formData.birthday ? formData.birthday : ''}
-            onChange={(event) => setFormData((prevState) => ({ ...prevState, birthday: event.target.value }))}
+            onChange={handleChange}
           />
           <Input
             label="CPF"
@@ -106,16 +94,16 @@ function CreateCustomer() {
             name="cpf"
             type="text"
             value={formData.cpf ? formData.cpf : ''}
-            onChange={(event) => setFormData((prevState) => ({ ...prevState, cpf: formatCpf(event.target.value) }))}
+            onChange={handleChange}
             maxLength="14"
           />
           <Input
             label="Tamanho do sapato"
             id="shoes"
             name="shoes"
-            type="text"
+            type="number"
             value={formData.shoes ? formData.shoes : ''}
-            onChange={(event) => setFormData((prevState) => ({ ...prevState, shoes: event.target.value }))}
+            onChange={handleChange}
           />
           <Input
             label="Tamanho da parte de cima"
@@ -123,7 +111,7 @@ function CreateCustomer() {
             name="top"
             type="text"
             value={formData.top ? formData.top : ''}
-            onChange={(event) => setFormData((prevState) => ({ ...prevState, top: event.target.value }))}
+            onChange={handleChange}
           />
           <Input
             label="Tamanho da parte de baixo"
@@ -131,7 +119,7 @@ function CreateCustomer() {
             name="bottom"
             type="text"
             value={formData.bottom ? formData.bottom : ''}
-            onChange={(event) => setFormData((prevState) => ({ ...prevState, bottom: event.target.value }))}
+            onChange={handleChange}
           />
           <Textarea
             label="Observações"
@@ -139,7 +127,7 @@ function CreateCustomer() {
             name="desc"
             type="text"
             value={formData.desc ? formData.desc : ''}
-            onChange={(event) => setFormData((prevState) => ({ ...prevState, desc: event.target.value }))}
+            onChange={handleChange}
           />
           <Button type="submit">
             Cadastrar cliente

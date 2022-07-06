@@ -5,8 +5,8 @@ import Input from '../../../components/Form/Input';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
 import Table from '../../../components/Table';
+import { useGetCustomers } from '../../../hooks/useCustomer';
 import { useDebounce } from '../../../hooks/useDebounce';
-import CustomersService from '../../../services/CustomersService';
 import { AddIcon, Button } from './styles';
 
 function Customers() {
@@ -16,11 +16,8 @@ function Customers() {
   const tableHeads = ['Nome', 'Telefone', 'Endereço', 'CEP'];
 
   const {
-    data: customers,
-    error,
-    isError,
-    isLoading,
-  } = useQuery(['customers', { debounceSearch }], () => CustomersService.listCustomers(debounceSearch));
+    customers, error, isError, isLoading,
+  } = useGetCustomers(debounceSearch);
 
   const handleTableClick = (customerId) => {
     navigate(`../${customerId}`);

@@ -1,22 +1,21 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation, useQueries, useQueryClient } from 'react-query';
 import Input from '../../../components/Form/Input';
 import Textarea from '../../../components/Form/Textarea';
 import { Wrapper } from '../../../components/Layout/Wrapper';
 import PageTitle from '../../../components/PageTitle';
-import CustomersService from '../../../services/CustomersService';
-import { triggerToast, Toast } from '../../../utils/triggerToast';
+import { Toast } from '../../../utils/triggerToast';
 import { Button, ButtonFloat, EditIcon } from './styles';
 import { formatPhone, formatCep, formatCpf } from '../../../utils';
 import BackButton from '../../../components/BackButton';
 import Table from '../../../components/Table/index';
-import OrdersService from '../../../services/OrdersService';
+import { useDeleteCustomer, useEditCustomer, useGetCustomer } from '../../../hooks/useCustomer';
 
 function ShowCustomer() {
   const { id: customerId } = useParams();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const handleDelete = useDeleteCustomer(customerId);
+  const handleEdit = useEditCustomer();
   const tableHeads = [
     'Data',
     'Qt. Produtos',
@@ -29,37 +28,14 @@ function ShowCustomer() {
   const [isEditing, setIsEditing] = useState(false);
   const [fields, setFields] = useState({});
 
-  const { mutate: deleteCustomer } = useMutation(CustomersService.deleteCustomer);
+  const {
+    customer, restCustomer, orders, restOrders, isLoading, isError,
+  } = useGetCustomer(customerId, setFields);
 
-  const [{ data: customer, ...restCustomer }, { data: orders, ...restOrders }] = useQueries([
-    {
-      queryKey: ['customer', customerId],
-      queryFn: () => CustomersService.getCustomer(customerId),
-      onSuccess: (data) => setFields(data),
-    },
-    {
-      queryKey: ['ordersFromCustomer', customerId],
-      queryFn: () => OrdersService.listOrdersFromCustomer(customerId),
-    },
-  ]);
-
-  const { mutate: editCustomer } = useMutation(CustomersService.editCustomer, {
-    onMutate: () => {
-      setIsEditing(false);
-    },
-    onSuccess: (data) => {
-      queryClient.setQueryData(['customer', customer.id], data);
-      triggerToast('success', 'Cliente editado com sucesso');
-    },
-    onError: (err) => {
-      triggerToast('error', err.message);
-    },
-  });
-
-  if (restCustomer.isLoading || restOrders.isLoading) {
+  if (isLoading) {
     return <div>Aguarde...</div>;
   }
-  if (restCustomer.isError || restOrders.isError) {
+  if (isError) {
     return (
       <div>Erro! {restCustomer.isError.message
         ? restCustomer.isError.message
@@ -84,25 +60,15 @@ function ShowCustomer() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    editCustomer(fields);
+    handleEdit(fields);
   };
 
   const handleEnableEdit = () => {
     setIsEditing(true);
   };
 
-  const handleDelete = async () => {
-    deleteCustomer(customerId, {
-      onSuccess: (data) => {
-        triggerToast('error', 'Cliente deletado');
-        setTimeout(() => {
-          navigate('/clientes');
-        }, 2000);
-      },
-      onError: (err) => {
-        triggerToast('error', err.message);
-      },
-    });
+  const handleClickDelete = () => {
+    handleDelete();
   };
 
   const handleTableClick = (orderId) => {
@@ -113,7 +79,7 @@ function ShowCustomer() {
     <>
       <Toast />
       <BackButton />
-      <ButtonFloat danger onClick={handleDelete}>
+      <ButtonFloat danger onClick={handleClickDelete}>
         <EditIcon />
         Deletar cliente
       </ButtonFloat>
@@ -194,7 +160,7 @@ function ShowCustomer() {
             label="Tamanho do sapato"
             id="shoes"
             name="shoes"
-            type="text"
+            type="number"
             readOnly={!isEditing}
             value={fields.shoes ? fields.shoes : ''}
             onChange={(event) => handleChange(event)}
